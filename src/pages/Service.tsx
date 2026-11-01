@@ -4,7 +4,6 @@ export interface ServiceContent {
   h1: string;
   lede: string;
   offers: { h: string; p: string }[];
-  examples: string[];
   fits: string[];
   faq: { q: string; a: string }[];
 }
@@ -36,15 +35,9 @@ export function Service({ c }: { c: ServiceContent }) {
       </section>
 
       <section className="section section-alt">
-        <div className="wrap two-col">
-          <div>
-            <h2>Exempel på uppdrag</h2>
-            <ul className="checklist">{c.examples.map((e) => <li key={e}>{e}</li>)}</ul>
-          </div>
-          <div>
-            <h2>Passar dig som</h2>
-            <ul className="checklist">{c.fits.map((e) => <li key={e}>{e}</li>)}</ul>
-          </div>
+        <div className="wrap narrow">
+          <h2>Passar dig som</h2>
+          <ul className="checklist">{c.fits.map((e) => <li key={e}>{e}</li>)}</ul>
         </div>
       </section>
 
@@ -86,13 +79,6 @@ export const EXCEL: ServiceContent = {
     { h: 'Mallar som alla kan använda', p: 'Tydliga inmatningsfält och instruktioner så att kollegor och styrelsemedlemmar kan använda arket utan att något går sönder.' },
     { h: 'Excel eller Google Kalkylark', p: 'Jag bygger i det verktyg du redan har, och kan flytta ett ark mellan dem om du vill byta.' },
   ],
-  examples: [
-    'Säljuppföljning med veckomål och provisionsberäkning',
-    'Statistik och topplista för ett idrottslag',
-    'Budget och utfall för en förening',
-    'Planeringsverktyg för innehåll, försäljning och lager',
-    'Habit tracker och privat budget',
-  ],
   fits: [
     'Har ett kalkylark som ingen längre förstår',
     'Gör samma sammanställning för hand varje vecka eller månad',
@@ -115,12 +101,6 @@ export const DIGITAL: ServiceContent = {
     { h: 'Rutiner för föreningen', p: 'Medlemslistor, avgifter, materialbeställningar och påminnelser som sköter sig mer av sig själva.' },
     { h: 'Från papper till digitalt', p: 'Jag går igenom hur ni jobbar idag och föreslår vad som är värt att digitalisera först.' },
     { h: 'Dokumentation', p: 'Du får en kort beskrivning av hur allt hänger ihop, så att det fungerar även när någon ny tar över.' },
-  ],
-  examples: [
-    'Anmälningsformulär för träningar och arrangemang',
-    'Gemensam beställning av utrustning till ett lag',
-    'Mejl på egen domän med delad kalender',
-    'Digital närvaro- och medlemslista',
   ],
   fits: [
     'Lägger mycket tid på administration',

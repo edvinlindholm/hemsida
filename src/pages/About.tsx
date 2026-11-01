@@ -8,8 +8,8 @@ export function About() {
         <div className="wrap narrow">
           <h1>Om mig</h1>
           <p className="lede">
-            Jag heter Edvin Lindholm. Jag har en utbildning inom IT, har jobbat som IT-tekniker och som produktions- och
-            IT-tekniker, och jag gillar att bygga system som gör vardagen enklare.
+            Jag heter Edvin Lindholm och är utbildad inom dator- och kommunikationsteknik. Jag har jobbat med IT-support,
+            digitalisering och effektivisering, och jag gillar att bygga system som gör vardagen enklare.
           </p>
           <a className="btn btn-ghost" href={SITE.linkedin} rel="noopener noreferrer" target="_blank">Se min profil på LinkedIn</a>
         </div>
@@ -17,19 +17,20 @@ export function About() {
       <section className="section tight-top">
         <div className="wrap narrow prose">
           <p>
-            Innan IT-yrket tävlade jag i e-sport på professionell nivå. Där lärde jag mig att analysera, hitta det som går
-            att göra bättre och jobba strukturerat mot ett mål. Samma sätt att tänka använder jag när jag tar mig an ett
-            krångligt kalkylark eller en rutin som tar för lång tid.
+            Senast arbetade jag som produktions- och IT-tekniker inom industrin, där jag ansvarade för IT, digitalisering
+            och projektledning i produktionen. Där drev jag kostnadsbesparande initiativ och tog fram tekniska lösningar
+            som effektiviserade arbetet. Innan dess jobbade jag med IT-support och gick ett traineeprogram inom
+            IT-support, systemadministration och drift.
           </p>
           <p>
-            Jag har alltid byggt verktyg som underlättar, både på jobbet och vid sidan av: statistik för ett innebandylag,
-            planering för ett klädmärke och trackers för vanor och ekonomi. Oftast är det enklaste alternativet det bästa,
-            ett bättre kalkylark eller ett formulär snarare än ett nytt dyrt system.
+            Innan IT-yrket var jag professionell e-sportspelare i Fortnite och spelade för lag som GODSENT och Luck
+            Equation. Jag har också varit coach inom e-sport. Där lärde jag mig att analysera, hitta det som går att göra
+            bättre och jobba strukturerat mot ett mål. Samma sätt att tänka använder jag i mina uppdrag.
           </p>
           <dl className="facts">
-            <div><dt>Utbildning</dt><dd>IT</dd></div>
-            <div><dt>Erfarenhet</dt><dd>IT-tekniker, produktions- och IT-tekniker</dd></div>
-            <div><dt>Bakgrund</dt><dd>Professionell e-sportspelare</dd></div>
+            <div><dt>Utbildning</dt><dd>El- och energiprogrammet, dator- och kommunikationsteknik</dd></div>
+            <div><dt>Erfarenhet</dt><dd>Produktions- och IT-tekniker, IT-support, IT-trainee</dd></div>
+            <div><dt>Bakgrund</dt><dd>Professionell e-sportspelare och coach</dd></div>
           </dl>
           <h2>Så jobbar jag</h2>
           <ul className="checklist">

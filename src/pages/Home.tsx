@@ -30,24 +30,6 @@ const STEPS = [
   { h: 'Överlämning', p: 'Jag visar hur allt fungerar så att du klarar dig själv.' },
 ];
 
-const CASES = [
-  {
-    title: 'Löpningstracker för innebandylag',
-    text: 'Försäsongsträning för 26 spelare med statistik per spelare, tempo och en topplista som uppdateras automatiskt.',
-    tag: 'Förening',
-  },
-  {
-    title: 'Säljuppföljning vecka för vecka',
-    text: 'Provisionsbaserad försäljning jämförs mot veckomålet, så att man direkt ser om man ligger efter.',
-    tag: 'Företag',
-  },
-  {
-    title: 'Planeringsverktyg för klädmärke',
-    text: 'En arbetsbok som samlar innehållskalender, försäljning, uppgifter och kollektioner på ett ställe.',
-    tag: 'Företag',
-  },
-];
-
 export function Home() {
   return (
     <>
@@ -114,21 +96,6 @@ export function Home() {
               </li>
             ))}
           </ol>
-        </div>
-      </section>
-
-      <section className="section section-alt" aria-labelledby="ex-rubrik">
-        <div className="wrap">
-          <h2 id="ex-rubrik">Exempel på sådant jag har byggt</h2>
-          <div className="cards">
-            {CASES.map((c) => (
-              <article key={c.title} className="card">
-                <span className="tag">{c.tag}</span>
-                <h3>{c.title}</h3>
-                <p>{c.text}</p>
-              </article>
-            ))}
-          </div>
         </div>
       </section>
 
