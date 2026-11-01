@@ -50,7 +50,7 @@ export function Footer() {
         <div>
           <Logo />
           <p className="muted-on-dark">
-            Excel och digitalisering för företag, föreningar och privatpersoner. Baserad i {SITE.city}, {SITE.region}.
+            Excel och digitalisering för företag, föreningar och privatpersoner. Arbetet sker på distans.
           </p>
         </div>
         <div>
@@ -65,6 +65,7 @@ export function Footer() {
           <ul>
             <li><a href="/kontakt/">Begär en offert</a></li>
             <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+            <li><a href={SITE.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></li>
             <li><a href="/integritet/">Integritetspolicy</a></li>
           </ul>
         </div>

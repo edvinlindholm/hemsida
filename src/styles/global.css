@@ -102,6 +102,7 @@ p { margin: 0 0 16px; }
 /* ---------- sektioner ---------- */
 .section { padding: clamp(64px, 9vw, 104px) 0; }
 .section-alt { background: var(--bg-alt); }
+.section.tight-top { padding-top: 0; }
 .split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); }
 .two-col h2 { font-size: clamp(24px, 2.6vw, 30px); }

@@ -137,7 +137,7 @@ export function Home() {
           <h2 id="om-rubrik">Hej, jag heter Edvin</h2>
           <div>
             <p>
-              Jag bor i Örkelljunga och bygger verktyg som gör vardagen enklare för föreningar, företag och mig själv.
+              Jag har en utbildning inom IT, har jobbat som IT-tekniker och gillar att bygga system som gör vardagen enklare.
               Det bästa jag vet är när något som tog en timme i veckan plötsligt tar två minuter.
             </p>
             <a className="text-link" href="/om-mig/">Mer om mig</a>

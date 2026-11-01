@@ -32,8 +32,8 @@ function head(route: Route): string {
       url: SITE.url,
       email: SITE.email,
       description: route.description,
-      areaServed: ['Skåne', 'Sverige'],
-      address: { '@type': 'PostalAddress', addressLocality: SITE.city, addressRegion: SITE.region, addressCountry: 'SE' },
+      areaServed: 'Sverige',
+      sameAs: [SITE.linkedin],
       knowsAbout: ['Microsoft Excel', 'Google Kalkylark', 'Digitalisering', 'Automatisering'],
     };
     tags.push(`<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`);

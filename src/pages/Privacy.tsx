@@ -8,7 +8,7 @@ export function Privacy() {
         <p className="lede">Så här hanterar jag uppgifterna du skickar via formuläret på {SITE.url.replace('https://', '')}.</p>
 
         <h2>Vem ansvarar för uppgifterna?</h2>
-        <p>Edvin Lindholm, {SITE.city}, är personuppgiftsansvarig. Du når mig på <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+        <p>Edvin Lindholm är personuppgiftsansvarig. Du når mig på <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
 
         <h2>Vilka uppgifter sparas?</h2>
         <p>Det du själv fyller i: namn, mejladress och, om du vill, telefonnummer, organisation och ort, samt det du skriver om ditt behov.</p>

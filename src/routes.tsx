@@ -14,7 +14,7 @@ export interface Route extends PageMeta {
 export const ROUTES: Route[] = [
   {
     path: '/',
-    title: 'Edvin Lindholm – Excelkonsult och digitalisering i Skåne',
+    title: 'Edvin Lindholm – Excelkonsult och digitalisering på distans',
     description: 'Jag bygger Excel-verktyg och digitaliserar manuella rutiner som tar onödig tid. För företag, föreningar och privatpersoner. Fast pris i offerten.',
     render: () => <Home />,
   },
@@ -33,7 +33,7 @@ export const ROUTES: Route[] = [
   {
     path: '/om-mig/',
     title: 'Om mig | Edvin Lindholm',
-    description: 'Edvin Lindholm från Örkelljunga bygger Excel-verktyg och digitala lösningar för företag, föreningar och privatpersoner.',
+    description: 'Edvin Lindholm har en IT-utbildning, bakgrund som IT-tekniker och e-sportspelare, och bygger Excel-verktyg och digitala lösningar som gör vardagen enklare.',
     render: () => <About />,
   },
   {

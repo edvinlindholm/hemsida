@@ -2,8 +2,7 @@ export const SITE = {
   name: 'Edvin Lindholm',
   url: 'https://edvinlindholm.se',
   email: 'hej@edvinlindholm.se',
-  city: 'Örkelljunga',
-  region: 'Skåne',
+  linkedin: 'https://se.linkedin.com/in/edvin-lindholm-1001b41b7',
 } as const;
 
 export interface PageMeta {
