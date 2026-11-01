@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edvin Lindholm – Excel, digitalisering och AI</title>
+<meta name="description" content="Jag bygger Excel-verktyg, digitaliserar manuella rutiner och sätter upp AI och automation för företag, föreningar och privatpersoner. Baserad i Örkelljunga, Skåne.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2315202B'/%3E%3Crect x='7' y='7' width='18' height='18' fill='none' stroke='%232E62F5' stroke-width='3'/%3E%3Crect x='22' y='22' width='5' height='5' fill='%232E62F5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blak:#15202B;      /* bläck: mörka ytor */
+  --blak-2:#1C2A37;
+  --papper:#F6F7F4;    /* ljus bakgrund */
+  --vit:#FFFFFF;
+  --text:#1A232C;
+  --dampad:#56636F;
+  --linje:#D9DDD6;     /* rutnät */
+  --markering:#2E62F5; /* cellmarkering */
+  --cell:#FFE58A;      /* aktiv cell */
+  --ff:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --max:1120px;
+  --gutter:clamp(16px,4vw,40px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--papper);color:var(--text);font-family:var(--ff);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--markering);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:16px;top:16px;background:var(--vit);padding:8px 12px;z-index:10}
+
+/* ---------- header ---------- */
+.top{position:absolute;inset:0 0 auto 0;z-index:3;color:var(--papper)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;gap:16px}
+.logo{font-weight:700;text-decoration:none;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+.logo i{width:14px;height:14px;border:2.5px solid var(--markering);position:relative;display:inline-block}
+.logo i::after{content:"";position:absolute;right:-5px;bottom:-5px;width:5px;height:5px;background:var(--markering)}
+.nav{display:flex;gap:28px;align-items:center;font-size:15px}
+.nav a{text-decoration:none;opacity:.8}
+.nav a:hover{opacity:1}
+.nav .btn{opacity:1}
+@media (max-width:760px){.nav a:not(.btn){display:none}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--markering);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:11px 18px;border-radius:6px;border:0;cursor:pointer}
+.btn:hover{background:#2453d8}
+.btn.ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+
+/* ---------- hero: ett kalkylark ---------- */
+.hero{background:var(--blak);color:var(--papper);position:relative;overflow:hidden;padding:150px 0 110px}
+.sheet{position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(to right, rgba(246,247,244,.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(246,247,244,.07) 1px, transparent 1px);
+  background-size:128px 40px;background-position:52px 112px}
+.cols{position:absolute;left:52px;right:0;top:76px;height:36px;display:flex;font-size:12px;color:rgba(246,247,244,.38);border-bottom:1px solid rgba(246,247,244,.12)}
+.cols span{flex:0 0 128px;display:flex;align-items:center;justify-content:center;border-left:1px solid rgba(246,247,244,.07)}
+.rows{position:absolute;left:0;top:112px;bottom:0;width:52px;font-size:12px;color:rgba(246,247,244,.38);border-right:1px solid rgba(246,247,244,.12)}
+.rows span{display:flex;height:40px;align-items:center;justify-content:center}
+
+.fx{position:relative;display:flex;align-items:stretch;max-width:640px;border:1px solid rgba(246,247,244,.18);border-radius:6px;background:var(--blak-2);font-size:15px;margin-bottom:44px}
+.fx .ref{padding:10px 14px;border-right:1px solid rgba(246,247,244,.18);color:rgba(246,247,244,.6);min-width:62px;text-align:center}
+.fx .f{padding:10px 14px;color:rgba(246,247,244,.6);border-right:1px solid rgba(246,247,244,.18);font-style:italic;font-weight:600}
+.fx .val{padding:10px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--papper)}
+.fx .caret{display:inline-block;width:1.5px;height:1.05em;background:var(--cell);vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.range{position:relative;display:inline-block;padding:18px 22px 22px;margin-left:-22px;
+  box-shadow:inset 0 0 0 2.5px var(--markering);background:rgba(46,98,245,.10)}
+.range::after{content:"";position:absolute;right:-5px;bottom:-5px;width:9px;height:9px;background:var(--markering);box-shadow:0 0 0 2px var(--blak)}
+h1{font-size:clamp(38px,6.4vw,76px);line-height:1.02;letter-spacing:-.035em;font-weight:800;margin:0;max-width:13ch}
+.lede{font-size:clamp(18px,2vw,21px);line-height:1.55;color:rgba(246,247,244,.78);max-width:46ch;margin:34px 0 36px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.hero-note{margin-top:28px;font-size:14px;color:rgba(246,247,244,.55)}
+
+/* ---------- sektioner ---------- */
+section{padding:clamp(72px,10vw,120px) 0}
+h2{font-size:clamp(30px,4vw,46px);line-height:1.08;letter-spacing:-.025em;font-weight:800;margin:0 0 18px;max-width:20ch}
+.intro{color:var(--dampad);max-width:56ch;margin:0 0 56px;font-size:18px}
+
+/* tjänster som rader i ett ark */
+.services{border-top:1.5px solid var(--text)}
+.svc{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,5fr) minmax(0,3fr);gap:32px;padding:36px 0;border-bottom:1px solid var(--linje)}
+.svc h3{font-size:26px;letter-spacing:-.02em;line-height:1.15;margin:0;font-weight:700}
+.svc p{margin:0;color:var(--dampad)}
+.svc ul{margin:0;padding:0;list-style:none;font-size:15px}
+.svc li{padding:6px 0;border-bottom:1px dashed var(--linje)}
+.svc li:last-child{border-bottom:0}
+@media (max-width:860px){.svc{grid-template-columns:1fr;gap:14px}}
+
+/* exempel */
+.work{background:var(--vit)}
+.cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.case{border:1px solid var(--linje);border-radius:4px;overflow:hidden;background:var(--papper);display:flex;flex-direction:column}
+.case .mini{background:var(--vit);border-bottom:1px solid var(--linje);padding:16px;font-size:12.5px}
+.mini table{width:100%;border-collapse:collapse}
+.mini td,.mini th{border:1px solid var(--linje);padding:5px 7px;text-align:left;font-weight:400;white-space:nowrap}
+.mini th{background:var(--papper);color:var(--dampad);font-weight:500}
+.mini .hl{box-shadow:inset 0 0 0 2px var(--markering);background:rgba(46,98,245,.07)}
+.mini .num{text-align:right}
+.mini .bar{display:inline-block;height:7px;background:var(--markering);border-radius:1px;vertical-align:middle}
+.case .body{padding:22px 22px 26px}
+.case h3{font-size:20px;margin:0 0 8px;letter-spacing:-.01em;line-height:1.25}
+.case p{margin:0;color:var(--dampad);font-size:15.5px}
+@media (max-width:900px){.cases{grid-template-columns:1fr}}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s;border-top:1.5px solid var(--text)}
+.step{padding:28px 24px 8px 0;border-right:1px solid var(--linje);margin-right:24px}
+.step:last-child{border-right:0;margin-right:0}
+.step b{display:block;font-size:44px;font-weight:800;letter-spacing:-.04em;color:var(--markering);line-height:1;margin-bottom:18px}
+.step h3{margin:0 0 6px;font-size:19px}
+.step p{margin:0;color:var(--dampad);font-size:15.5px}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}.step{margin-right:0;padding-right:20px;padding-bottom:24px;border-right:0;border-bottom:1px solid var(--linje)}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* om mig */
+.about .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:64px;align-items:start}
+.about p{margin:0 0 18px;max-width:58ch}
+.facts{margin:0;padding:0;list-style:none;border-top:1.5px solid var(--text)}
+.facts li{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--linje);font-size:15.5px}
+.facts span{color:var(--dampad)}
+@media (max-width:860px){.about .wrap{grid-template-columns:1fr;gap:32px}}
+
+/* kontakt */
+.contact{background:var(--blak);color:var(--papper)}
+.contact h2{max-width:16ch}
+.contact .intro{color:rgba(246,247,244,.72)}
+.mail{display:inline-block;font-size:clamp(26px,4.4vw,52px);font-weight:800;letter-spacing:-.03em;text-decoration:none;padding:10px 16px;margin-left:-16px;box-shadow:inset 0 0 0 2.5px var(--markering);background:rgba(46,98,245,.12);position:relative;word-break:break-all}
+.mail::after{content:"";position:absolute;right:-5px;bottom:-5px;width:9px;height:9px;background:var(--markering);box-shadow:0 0 0 2px var(--blak)}
+.mail:hover{background:rgba(46,98,245,.22)}
+.contact-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px;padding-top:28px;border-top:1px solid rgba(246,247,244,.16);font-size:15px}
+.contact-meta h3{font-size:15px;margin:0 0 6px;color:rgba(246,247,244,.55);font-weight:500}
+.contact-meta p{margin:0}
+@media (max-width:760px){.contact-meta{grid-template-columns:1fr}}
+
+footer{background:var(--blak);color:rgba(246,247,244,.5);font-size:14px;padding:28px 0 40px;border-top:1px solid rgba(246,247,244,.1)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+@media (max-width:600px){
+  .hero{padding:118px 0 80px}
+  .sheet{background-position:28px 104px;background-size:96px 40px}
+  .cols{left:28px;top:68px}.cols span{flex-basis:96px}
+  .rows{width:28px;top:104px}
+  .top .wrap{height:68px}
+  .range{padding:14px 16px 18px;margin-left:-16px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#innehall">Hoppa till innehållet</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#"><i aria-hidden="true"></i>Edvin Lindholm</a>
+    <nav class="nav" aria-label="Huvudmeny">
+      <a href="#tjanster">Tjänster</a>
+      <a href="#exempel">Exempel</a>
+      <a href="#om">Om mig</a>
+      <a class="btn" href="#kontakt">Kontakta mig</a>
+    </nav>
+  </div>
+</header>
+
+<main id="innehall">
+<section class="hero" aria-labelledby="rubrik">
+  <div class="sheet" aria-hidden="true"></div>
+  <div class="cols" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span></div>
+  <div class="rows" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span></div>
+
+  <div class="wrap" style="position:relative">
+    <div class="fx" aria-hidden="true">
+      <span class="ref">B3</span><span class="f">fx</span>
+      <span class="val"><span id="formel">=AUTOMATISERA(det_du_gör_för_hand)</span><span class="caret"></span></span>
+    </div>
+    <div class="range">
+      <h1 id="rubrik">Mindre handpåläggning. Mer som sköter sig självt.</h1>
+    </div>
+    <p class="lede">Jag bygger Excel-verktyg, digitaliserar manuella rutiner och sätter upp AI som sparar tid åt företag, föreningar och privatpersoner.</p>
+    <div class="cta-row">
+      <a class="btn" href="#kontakt">Berätta vad du vill lösa</a>
+      <a class="btn ghost" href="#tjanster">Se vad jag gör</a>
+    </div>
+    <p class="hero-note">Baserad i Örkelljunga, Skåne. Jobbar på plats och på distans.</p>
+  </div>
+</section>
+
+<section id="tjanster" aria-labelledby="tj-rubrik">
+  <div class="wrap">
+    <h2 id="tj-rubrik">Det här kan jag hjälpa dig med</h2>
+    <p class="intro">Tre områden som hänger ihop. Ofta börjar det med ett kalkylark som vuxit sig för stort, och slutar med en rutin som går av sig själv.</p>
+
+    <div class="services">
+      <article class="svc">
+        <h3>Excel och kalkylark</h3>
+        <p>Från röriga ark till verktyg som räknar rätt, är lätta att fylla i och visar det du behöver se. Jag bygger nytt eller städar upp det du redan har.</p>
+        <ul>
+          <li>Budget och uppföljning</li>
+          <li>Försäljnings- och måltracker</li>
+          <li>Rapporter och sammanställningar</li>
+          <li>Mallar som vem som helst kan använda</li>
+        </ul>
+      </article>
+      <article class="svc">
+        <h3>Digitalisering</h3>
+        <p>Papperslappar, mejltrådar och dubbelarbete blir digitala flöden. Jag hittar var tiden försvinner och föreslår det enklaste som fungerar.</p>
+        <ul>
+          <li>Formulär och anmälningar</li>
+          <li>Delade kalendrar och listor</li>
+          <li>Google Workspace och Microsoft 365</li>
+          <li>Rutiner för förening och företag</li>
+        </ul>
+      </article>
+      <article class="svc">
+        <h3>AI och automation</h3>
+        <p>AI-verktyg som faktiskt används i vardagen. Jag sätter upp dem, kopplar dem till det du redan jobbar i och visar hur du får ut mest av dem.</p>
+        <ul>
+          <li>AI-assistent för mejl och dokument</li>
+          <li>Automatiska påminnelser och flöden</li>
+          <li>Sammanfattningar och utkast</li>
+          <li>Genomgång för dig och dina kollegor</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="exempel" class="work" aria-labelledby="ex-rubrik">
+  <div class="wrap">
+    <h2 id="ex-rubrik">Sånt jag har byggt</h2>
+    <p class="intro">Verktyg som används på riktigt, i föreningen och i eget företagande.</p>
+
+    <div class="cases">
+      <article class="case">
+        <div class="mini" aria-hidden="true">
+          <table>
+            <tr><th>Spelare</th><th class="num">Km</th><th>Snitt</th></tr>
+            <tr><td>Spelare 7</td><td class="num hl">42,5</td><td><span class="bar" style="width:46px"></span></td></tr>
+            <tr><td>Spelare 12</td><td class="num">38,0</td><td><span class="bar" style="width:40px"></span></td></tr>
+            <tr><td>Spelare 3</td><td class="num">31,2</td><td><span class="bar" style="width:33px"></span></td></tr>
+          </table>
+        </div>
+        <div class="body">
+          <h3>Löpningstracker för innebandylag</h3>
+          <p>Försäsongsträning för 26 spelare med statistik per spelare, tempo och en topplista som uppdateras automatiskt.</p>
+        </div>
+      </article>
+      <article class="case">
+        <div class="mini" aria-hidden="true">
+          <table>
+            <tr><th>Vecka</th><th class="num">Mål</th><th class="num">Utfall</th></tr>
+            <tr><td>44</td><td class="num">8 000</td><td class="num">8 450</td></tr>
+            <tr><td>45</td><td class="num">8 000</td><td class="num hl">6 900</td></tr>
+            <tr><td>46</td><td class="num">8 500</td><td class="num">–</td></tr>
+          </table>
+        </div>
+        <div class="body">
+          <h3>Försäljningsmål vecka för vecka</h3>
+          <p>Provisionsbaserad säljuppföljning där varje vecka jämförs mot målet, så man ser direkt om man ligger efter.</p>
+        </div>
+      </article>
+      <article class="case">
+        <div class="mini" aria-hidden="true">
+          <table>
+            <tr><th>Flik</th><th>Innehåll</th></tr>
+            <tr><td>Innehåll</td><td>Publiceringskalender</td></tr>
+            <tr><td class="hl">Försäljning</td><td>Order och intäkter</td></tr>
+            <tr><td>Kollektion</td><td>Plagg och lager</td></tr>
+          </table>
+        </div>
+        <div class="body">
+          <h3>Planeringsverktyg för klädmärke</h3>
+          <p>En arbetsbok som samlar innehållskalender, försäljning, uppgifter och kollektionsplanering på ett ställe.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="pr-rubrik">
+  <div class="wrap">
+    <h2 id="pr-rubrik">Så går det till</h2>
+    <p class="intro">Inga priser på sidan, eftersom varje uppdrag ser olika ut. Du får alltid ett fast pris innan jag börjar.</p>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Kort samtal</h3><p>Du berättar vad som tar tid eller krånglar. Kostnadsfritt, ungefär 20 minuter.</p></div>
+      <div class="step"><b>2</b><h3>Förslag och offert</h3><p>Jag föreslår en lösning och ger dig ett fast pris.</p></div>
+      <div class="step"><b>3</b><h3>Jag bygger</h3><p>Du får se utkast under arbetet och kan säga till om ändringar.</p></div>
+      <div class="step"><b>4</b><h3>Överlämning</h3><p>Jag visar hur allt fungerar så att du klarar dig själv efteråt.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="om" class="work about" aria-labelledby="om-rubrik">
+  <div class="wrap">
+    <div>
+      <h2 id="om-rubrik">Hej, jag heter Edvin</h2>
+    </div>
+    <div>
+      <p>Jag bor i Örkelljunga och bygger verktyg som gör vardagen enklare, för föreningen, för företag och för mig själv. Jag gillar när något som tog en timme varje vecka plötsligt tar två minuter.</p>
+      <p>Jag är tränare och styrelseledamot i Örkelljunga IF och driver klädmärket CAVI. Många av verktygen jag bygger åt andra har jag först behövt själv.</p>
+      <ul class="facts">
+        <li><span>Område</span>Skåne och på distans</li>
+        <li><span>Kunder</span>Företag, föreningar och privatpersoner</li>
+        <li><span>Fakturering</span>Via Coolcompany, med moms</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="kontakt" class="contact" aria-labelledby="ko-rubrik">
+  <div class="wrap">
+    <h2 id="ko-rubrik">Vad vill du slippa göra för hand?</h2>
+    <p class="intro">Skriv några rader om vad du vill lösa, så hör jag av mig inom ett dygn och föreslår en tid för ett kort samtal.</p>
+    <a class="mail" href="mailto:hej@edvinlindholm.se?subject=F%C3%B6rfr%C3%A5gan%20via%20hemsidan">hej@edvinlindholm.se</a>
+    <div class="contact-meta">
+      <div><h3>Svarstid</h3><p>Inom ett dygn</p></div>
+      <div><h3>Första samtalet</h3><p>Kostnadsfritt</p></div>
+      <div><h3>Plats</h3><p>Örkelljunga, Skåne</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="ar">2026</span> Edvin Lindholm</span>
+    <span>edvinlindholm.se</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('ar').textContent=new Date().getFullYear();
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var el=document.getElementById('formel');
+  var lines=['=AUTOMATISERA(det_du_gör_för_hand)','=SUMMA(timmar_du_sparar)','=OM(papper;"digitalt";"klart")','=AI(mejl;"sammanfatta")'];
+  var i=0;
+  function type(t,cb){var n=0;el.textContent='';(function step(){el.textContent=t.slice(0,++n);if(n<t.length)setTimeout(step,38);else setTimeout(cb,2600);})();}
+  function next(){i=(i+1)%lines.length;type(lines[i],next);}
+  setTimeout(next,2600);
+})();
+</script>
+</body>
+</html>
