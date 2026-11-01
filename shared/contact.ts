@@ -2,7 +2,7 @@
 // så att samma regler gäller på båda ställena.
 
 export const CUSTOMER_TYPES = ['Företag', 'Förening', 'Privatperson'] as const;
-export const NEEDS = ['Excel och kalkylark', 'Digitalisering', 'AI och automation', 'Vet inte riktigt'] as const;
+export const NEEDS = ['Excel och kalkylark', 'Digitalisering', 'Vet inte riktigt'] as const;
 export const TIME_SPENT = ['Vet inte', 'Mindre än 1 timme i veckan', '1–5 timmar i veckan', 'Mer än 5 timmar i veckan'] as const;
 export const TIMELINES = ['Ingen brådska', 'Så snart som möjligt', 'Inom en månad', 'Inom några månader'] as const;
 export const TOOLS = ['Vet inte / inget särskilt', 'Microsoft (Excel, Outlook, Teams)', 'Google (Kalkylark, Gmail, Drive)', 'Både och', 'Annat'] as const;

@@ -17,6 +17,5 @@ export interface PageMeta {
 export const NAV = [
   { href: '/excel/', label: 'Excel' },
   { href: '/digitalisering/', label: 'Digitalisering' },
-  { href: '/ai-och-automation/', label: 'AI och automation' },
   { href: '/om-mig/', label: 'Om mig' },
 ] as const;

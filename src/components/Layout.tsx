@@ -50,7 +50,7 @@ export function Footer() {
         <div>
           <Logo />
           <p className="muted-on-dark">
-            Excel, digitalisering och AI för företag, föreningar och privatpersoner. Baserad i {SITE.city}, {SITE.region}.
+            Excel och digitalisering för företag, föreningar och privatpersoner. Baserad i {SITE.city}, {SITE.region}.
           </p>
         </div>
         <div>
@@ -58,7 +58,6 @@ export function Footer() {
           <ul>
             <li><a href="/excel/">Excel och kalkylark</a></li>
             <li><a href="/digitalisering/">Digitalisering</a></li>
-            <li><a href="/ai-och-automation/">AI och automation</a></li>
           </ul>
         </div>
         <div>

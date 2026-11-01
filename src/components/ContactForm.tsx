@@ -26,7 +26,6 @@ const CUSTOMER_HINTS: Record<string, string> = {
 const NEED_HINTS: Record<string, string> = {
   'Excel och kalkylark': 'Bygga nytt, fixa ett befintligt ark eller göra en mall',
   Digitalisering: 'Få bort papper, dubbelarbete och manuella rutiner',
-  'AI och automation': 'Komma igång med AI eller automatisera något som upprepas',
   'Vet inte riktigt': 'Du har ett problem men inte en lösning, och det är helt okej',
 };
 
@@ -158,8 +157,8 @@ export function ContactForm() {
         </div>
         <h2 ref={headingRef} tabIndex={-1}>Tack, förfrågan är skickad</h2>
         <p>
-          Jag går igenom dina svar och skickar en offert till <strong>{d.email.trim()}</strong> inom två arbetsdagar.
-          Behöver jag veta mer hör jag av mig innan dess.
+          Jag går igenom dina svar och hör av mig till <strong>{d.email.trim()}</strong> inom två arbetsdagar. Kan jag
+          hjälpa dig får du en offert med fast pris. Ligger det utanför det jag kan säger jag det, och då skickas ingen offert.
         </p>
         <a className="btn" href="/">Till startsidan</a>
       </div>

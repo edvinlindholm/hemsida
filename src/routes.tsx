@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { PageMeta } from './site';
 import { Home } from './pages/Home';
-import { Service, EXCEL, DIGITAL, AI } from './pages/Service';
+import { Service, EXCEL, DIGITAL } from './pages/Service';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
 import { Privacy } from './pages/Privacy';
@@ -14,8 +14,8 @@ export interface Route extends PageMeta {
 export const ROUTES: Route[] = [
   {
     path: '/',
-    title: 'Edvin Lindholm – Excelkonsult, digitalisering och AI i Skåne',
-    description: 'Jag bygger Excel-verktyg, digitaliserar manuella rutiner och hjälper dig komma igång med AI. För företag, föreningar och privatpersoner. Fast pris i offerten.',
+    title: 'Edvin Lindholm – Excelkonsult och digitalisering i Skåne',
+    description: 'Jag bygger Excel-verktyg och digitaliserar manuella rutiner som tar onödig tid. För företag, föreningar och privatpersoner. Fast pris i offerten.',
     render: () => <Home />,
   },
   {
@@ -29,12 +29,6 @@ export const ROUTES: Route[] = [
     title: 'Digitalisering av manuella rutiner | Edvin Lindholm',
     description: 'Från papper och mejltrådar till digitala formulär, delade listor och smarta flöden. För småföretag och föreningar i Skåne och på distans.',
     render: () => <Service c={DIGITAL} />,
-  },
-  {
-    path: '/ai-och-automation/',
-    title: 'AI och automation för småföretag och föreningar | Edvin Lindholm',
-    description: 'Kom igång med AI på riktigt. Jag sätter upp AI-verktyg, kopplar dem till mejl och dokument och automatiserar återkommande uppgifter.',
-    render: () => <Service c={AI} />,
   },
   {
     path: '/om-mig/',

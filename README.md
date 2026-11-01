@@ -1,6 +1,6 @@
 # edvinlindholm.se
 
-Konsulthemsida för Edvin Lindholm: Excel, digitalisering och AI.
+Konsulthemsida för Edvin Lindholm: Excel och digitalisering.
 
 - **Frontend:** React 19 + TypeScript, byggd med Vite. Varje sida förrenderas till statisk HTML vid bygget (bra för SEO och snabb laddning) och hydreras sedan i webbläsaren.
 - **Hosting:** Cloudflare Workers med statiska filer (Workers Static Assets). Cloudflare rekommenderar Workers framför Pages för nya projekt, och samma Worker kan både servera sidorna och ta emot kontaktformuläret.

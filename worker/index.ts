@@ -143,6 +143,8 @@ export default {
       url.hostname = 'edvinlindholm.se';
       return Response.redirect(url.toString(), 301);
     }
+    // Tjänsten är borttagen; skicka gamla länkar till startsidan.
+    if (url.pathname.startsWith('/ai-och-automation')) return Response.redirect(`${url.origin}/`, 301);
     if (url.pathname === '/api/kontakt') return handleContact(request, env);
     if (url.pathname.startsWith('/api/')) return json(404, { ok: false, error: 'not_found' });
     return env.ASSETS.fetch(request);

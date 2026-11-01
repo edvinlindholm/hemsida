@@ -14,12 +14,6 @@ const SERVICES = [
     more: 'Läs mer om digitalisering',
     text: 'Papper, mejltrådar och dubbelarbete blir digitala rutiner. Formulär, delade listor och smarta flöden.',
   },
-  {
-    href: '/ai-och-automation/',
-    title: 'AI och automation',
-    more: 'Läs mer om AI och automation',
-    text: 'Kom igång med AI på riktigt. Jag sätter upp verktygen, kopplar dem till det du redan använder och visar hur.',
-  },
 ];
 
 const PAINS = [
@@ -27,12 +21,11 @@ const PAINS = [
   'Kalkylarket har vuxit sig så stort att ingen vågar ändra i det.',
   'Anmälningar, listor och påminnelser sköts för hand.',
   'Varje månad tar rapporten en halv dag att sätta ihop.',
-  'Du vill använda AI men vet inte var du ska börja.',
 ];
 
 const STEPS = [
   { h: 'Berätta vad du behöver', p: 'Svara på några frågor i formuläret. Det tar ett par minuter.' },
-  { h: 'Offert till din mejl', p: 'Inom två arbetsdagar får du ett förslag och ett fast pris.' },
+  { h: 'Offert eller ärligt besked', p: 'Inom två arbetsdagar får du ett förslag med fast pris. Kan jag inte lösa det säger jag det direkt, och då skickas ingen offert.' },
   { h: 'Jag bygger', p: 'Du ser utkast under arbetet och säger till om ändringar.' },
   { h: 'Överlämning', p: 'Jag visar hur allt fungerar så att du klarar dig själv.' },
 ];
@@ -61,10 +54,10 @@ export function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
-            <h1>Excel, digitalisering och AI som sparar dig tid.</h1>
+            <h1>Excel och digitalisering som sparar dig tid.</h1>
             <p className="lede">
               Jag hjälper småföretag, föreningar och privatpersoner att bygga smarta kalkylark, få bort manuellt
-              dubbelarbete och komma igång med AI. Du får alltid ett fast pris innan jag börjar.
+              dubbelarbete. Du får alltid ett fast pris innan jag börjar.
             </p>
             <div className="btn-row">
               <a className="btn btn-large" href="/kontakt/">Jag är intresserad</a>
@@ -83,7 +76,7 @@ export function Home() {
       <section id="tjanster" className="section" aria-labelledby="tj-rubrik">
         <div className="wrap">
           <h2 id="tj-rubrik">Det här kan jag hjälpa dig med</h2>
-          <div className="cards">
+          <div className="cards cards-2">
             {SERVICES.map((s) => (
               <a key={s.href} className="card card-link" href={s.href}>
                 <h3>{s.title}</h3>

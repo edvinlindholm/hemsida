@@ -62,6 +62,10 @@ export function Service({ c }: { c: ServiceContent }) {
 
 const COMMON_FAQ = [
   {
+    q: 'Vad händer om du inte kan lösa det jag behöver?',
+    a: 'Då säger jag det rakt ut i stället för att skicka en offert. Jag tar bara uppdrag som jag vet att jag kan leverera, och det kostar dig ingenting att fråga.',
+  },
+  {
     q: 'Vad kostar det?',
     a: 'Varje uppdrag får ett fast pris i offerten, baserat på vad du behöver. Du vet alltså exakt vad det kostar innan jag börjar, och det kostar inget att be om en offert.',
   },
@@ -133,27 +137,3 @@ export const DIGITAL: ServiceContent = {
   ],
 };
 
-export const AI: ServiceContent = {
-  h1: 'AI och automation för vardagen',
-  lede: 'AI kan spara mycket tid, men bara om den används till rätt saker. Jag hjälper dig att komma igång, sätter upp verktygen och kopplar dem till det du redan jobbar i.',
-  offers: [
-    { h: 'Kom igång med AI', p: 'Vilka AI-verktyg passar dig, vad kostar de och vad ska de användas till? Jag går igenom det och sätter upp dem.' },
-    { h: 'AI i mejl och dokument', p: 'Låt AI sammanfatta, skriva utkast och leta upp information i dina mejl och filer.' },
-    { h: 'Automatiska flöden', p: 'Påminnelser, sammanställningar och återkommande uppgifter som körs av sig själva.' },
-    { h: 'Genomgång för dig och kollegorna', p: 'En praktisk genomgång med era egna exempel, så att alla vet hur och när AI är till hjälp.' },
-  ],
-  examples: [
-    'AI-assistent som skriver utkast till svar på kundförfrågningar',
-    'Automatisk sammanfattning av veckans mejl',
-    'Offertmallar som fylls i utifrån en förfrågan',
-  ],
-  fits: [
-    'Vill använda AI men vet inte var du ska börja',
-    'Skriver liknande mejl och dokument om och om igen',
-    'Vill att hela gruppen ska kunna använda AI på samma sätt',
-  ],
-  faq: [
-    { q: 'Är mina uppgifter säkra?', a: 'Jag går igenom vilka verktyg som passar för den information ni har och hur ni ställer in dem, innan något kopplas ihop.' },
-    ...COMMON_FAQ,
-  ],
-};
