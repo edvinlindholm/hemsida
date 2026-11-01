@@ -3,6 +3,8 @@
   "name": "hemsida",
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
+  // Bygger sidan automatiskt före varje `wrangler deploy`, även i Cloudflares bygge.
+  "build": { "command": "npm run build" },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
