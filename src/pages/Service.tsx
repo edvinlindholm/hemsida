@@ -96,9 +96,9 @@ export const DIGITAL: ServiceContent = {
   lede: 'Pappersblanketter, mejltrådar och listor som förs för hand tar tid och blir fel. Jag hittar var tiden försvinner och föreslår det enklaste som fungerar.',
   offers: [
     { h: 'Formulär och anmälningar', p: 'Digitala formulär där svaren hamnar direkt i ett kalkylark, i stället för mejl och papperslappar.' },
-    { h: 'Delade listor och kalendrar', p: 'Schema, bokningar och ansvarslistor som alla ser och som alltid är uppdaterade.' },
-    { h: 'Google Workspace och Microsoft 365', p: 'Jag sätter upp e-post på egen domän, delade mappar och behörigheter så att rätt person ser rätt sak.' },
-    { h: 'Rutiner för föreningen', p: 'Medlemslistor, avgifter, materialbeställningar och påminnelser som sköter sig mer av sig själva.' },
+    { h: 'Digitala checklistor och kontroller', p: 'Egenkontroller, avvikelser och checklistor fylls i på mobilen i stället för på papper och sammanställs automatiskt.' },
+    { h: 'Ordning bland filer och dokument', p: 'En gemensam mapp med tydlig ordning, så att alla hittar rätt fil och rätt version direkt i stället för att leta i mejl och på olika datorer.' },
+    { h: 'Digital tidrapportering', p: 'Tider och närvaro registreras direkt i mobilen och summeras automatiskt per vecka och månad.' },
     { h: 'Från papper till digitalt', p: 'Jag går igenom hur ni jobbar idag och föreslår vad som är värt att digitalisera först.' },
     { h: 'Dokumentation', p: 'Du får en kort beskrivning av hur allt hänger ihop, så att det fungerar även när någon ny tar över.' },
   ],
