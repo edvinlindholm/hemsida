@@ -138,6 +138,57 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.08;letter-spacing:-.025em;font-w
 .contact-meta p{margin:0}
 @media (max-width:760px){.contact-meta{grid-template-columns:1fr}}
 
+button.mail{font-family:inherit;color:inherit;border:0;cursor:pointer;text-align:left;word-break:normal}
+.contact-meta a{color:var(--papper)}
+
+/* ---------- formulär (dialog) ---------- */
+dialog.form{width:min(640px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:8px;background:var(--vit);color:var(--text);box-shadow:0 30px 80px rgba(21,32,43,.35);overflow:auto}
+dialog.form::backdrop{background:rgba(21,32,43,.72)}
+dialog.form[open]{animation:pop .22s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.f-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 28px;border-bottom:1px solid var(--linje)}
+.f-head strong{font-size:16px}
+.f-close{background:none;border:0;font:inherit;font-size:26px;line-height:1;cursor:pointer;color:var(--dampad);padding:4px 8px;border-radius:4px}
+.f-close:hover{background:var(--papper)}
+.progress{display:flex;gap:6px;padding:0 28px;margin-top:22px}
+.progress span{flex:1;height:4px;border-radius:2px;background:var(--linje);transition:background .2s}
+.progress span.on{background:var(--markering)}
+.f-step{padding:22px 28px 8px}
+.f-step[hidden]{display:none}
+.f-step h2{font-size:26px;margin:0 0 6px;max-width:none}
+.f-step .hint{margin:0 0 22px;color:var(--dampad);font-size:15.5px}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+@media (max-width:520px){.opts.two{grid-template-columns:1fr}}
+.opt{position:relative;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1.5px solid var(--linje);border-radius:6px;cursor:pointer;background:var(--vit)}
+.opt:hover{border-color:#b8bfb5}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .box{flex:0 0 18px;height:18px;margin-top:3px;border:1.5px solid #9aa39b;border-radius:3px;background:var(--vit)}
+.opt input[type=radio] + .box{border-radius:50%}
+.opt b{display:block;font-size:16px;font-weight:600}
+.opt small{display:block;color:var(--dampad);font-size:14px;line-height:1.4;margin-top:2px}
+.opt:has(input:checked){border-color:var(--markering);background:rgba(46,98,245,.06)}
+.opt input:checked + .box{border-color:var(--markering);background:var(--markering);box-shadow:inset 0 0 0 3px var(--vit)}
+.opt:has(input:focus-visible){outline:3px solid var(--markering);outline-offset:2px}
+.fld{display:block;margin-bottom:16px}
+.fld span{display:block;font-weight:600;font-size:15px;margin-bottom:6px}
+.fld span em{font-style:normal;font-weight:400;color:var(--dampad)}
+.fld input,.fld textarea,.fld select{width:100%;font:inherit;font-size:16px;padding:11px 13px;border:1.5px solid var(--linje);border-radius:6px;background:var(--vit);color:var(--text)}
+.fld textarea{min-height:120px;resize:vertical}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--markering);box-shadow:0 0 0 3px rgba(46,98,245,.18)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.err{color:#B4232C;font-size:14.5px;margin:4px 0 0;min-height:1.4em}
+.f-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 28px 24px}
+.f-foot .btn.ghost{color:var(--text)}
+.f-foot .btn.ghost:hover{background:var(--papper)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.done{text-align:left}
+.done .check{width:44px;height:44px;border:2.5px solid var(--markering);background:rgba(46,98,245,.08);display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative}
+.done .check::after{content:"";position:absolute;right:-5px;bottom:-5px;width:8px;height:8px;background:var(--markering)}
+.hp{position:absolute;left:-9999px}
+.fine{font-size:13px;color:var(--dampad);margin:6px 0 0}
+
 footer{background:var(--blak);color:rgba(246,247,244,.5);font-size:14px;padding:28px 0 40px;border-top:1px solid rgba(246,247,244,.1)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
@@ -162,7 +213,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <a href="#tjanster">Tjänster</a>
       <a href="#exempel">Exempel</a>
       <a href="#om">Om mig</a>
-      <a class="btn" href="#kontakt">Kontakta mig</a>
+      <button class="btn" type="button" data-open>Jag är intresserad</button>
     </nav>
   </div>
 </header>
@@ -183,7 +234,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     </div>
     <p class="lede">Jag bygger Excel-verktyg, digitaliserar manuella rutiner och sätter upp AI som sparar tid åt företag, föreningar och privatpersoner.</p>
     <div class="cta-row">
-      <a class="btn" href="#kontakt">Berätta vad du vill lösa</a>
+      <button class="btn" type="button" data-open>Jag är intresserad</button>
       <a class="btn ghost" href="#tjanster">Se vad jag gör</a>
     </div>
     <p class="hero-note">Baserad i Örkelljunga, Skåne. Jobbar på plats och på distans.</p>
@@ -285,10 +336,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section aria-labelledby="pr-rubrik">
   <div class="wrap">
     <h2 id="pr-rubrik">Så går det till</h2>
-    <p class="intro">Inga priser på sidan, eftersom varje uppdrag ser olika ut. Du får alltid ett fast pris innan jag börjar.</p>
+    <p class="intro">Inga priser på sidan, eftersom varje uppdrag ser olika ut. Du får alltid en offert med fast pris innan jag börjar.</p>
     <div class="steps">
-      <div class="step"><b>1</b><h3>Kort samtal</h3><p>Du berättar vad som tar tid eller krånglar. Kostnadsfritt, ungefär 20 minuter.</p></div>
-      <div class="step"><b>2</b><h3>Förslag och offert</h3><p>Jag föreslår en lösning och ger dig ett fast pris.</p></div>
+      <div class="step"><b>1</b><h3>Berätta vad du behöver</h3><p>Klicka på "Jag är intresserad" och svara på några frågor. Det tar ett par minuter.</p></div>
+      <div class="step"><b>2</b><h3>Offert till din mejl</h3><p>Inom två arbetsdagar får du ett förslag och ett fast pris. Behöver jag veta mer hör jag av mig först.</p></div>
       <div class="step"><b>3</b><h3>Jag bygger</h3><p>Du får se utkast under arbetet och kan säga till om ändringar.</p></div>
       <div class="step"><b>4</b><h3>Överlämning</h3><p>Jag visar hur allt fungerar så att du klarar dig själv efteråt.</p></div>
     </div>
@@ -315,11 +366,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section id="kontakt" class="contact" aria-labelledby="ko-rubrik">
   <div class="wrap">
     <h2 id="ko-rubrik">Vad vill du slippa göra för hand?</h2>
-    <p class="intro">Skriv några rader om vad du vill lösa, så hör jag av mig inom ett dygn och föreslår en tid för ett kort samtal.</p>
-    <a class="mail" href="mailto:hej@edvinlindholm.se?subject=F%C3%B6rfr%C3%A5gan%20via%20hemsidan">hej@edvinlindholm.se</a>
+    <p class="intro">Svara på några korta frågor om vad du behöver, så skickar jag en offert till din mejl. Det kostar inget och du binder dig inte till något.</p>
+    <button class="mail" type="button" data-open>Jag är intresserad</button>
     <div class="contact-meta">
-      <div><h3>Svarstid</h3><p>Inom ett dygn</p></div>
-      <div><h3>Första samtalet</h3><p>Kostnadsfritt</p></div>
+      <div><h3>Offert</h3><p>Inom två arbetsdagar</p></div>
+      <div><h3>Hellre mejla direkt?</h3><p><a href="mailto:hej@edvinlindholm.se">hej@edvinlindholm.se</a></p></div>
       <div><h3>Plats</h3><p>Örkelljunga, Skåne</p></div>
     </div>
   </div>
@@ -333,7 +384,158 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </footer>
 
+<dialog class="form" id="forfragan" aria-labelledby="f-titel">
+  <form id="f" novalidate>
+    <div class="f-head">
+      <strong id="f-titel">Förfrågan om offert</strong>
+      <button class="f-close" type="button" data-close aria-label="Stäng">×</button>
+    </div>
+    <div class="progress" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+    <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+
+    <fieldset class="f-step" data-step="1" style="border:0;margin:0">
+      <h2>Vem är du?</h2>
+      <p class="hint">Steg 1 av 4</p>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="Kundtyp" value="Företag" required><span class="box"></span><span><b>Företag</b><small>Du driver eller jobbar på ett företag</small></span></label>
+        <label class="opt"><input type="radio" name="Kundtyp" value="Förening"><span class="box"></span><span><b>Förening</b><small>Idrottsförening, bostadsrättsförening eller liknande</small></span></label>
+        <label class="opt"><input type="radio" name="Kundtyp" value="Privatperson"><span class="box"></span><span><b>Privatperson</b><small>Något för dig själv eller hushållet</small></span></label>
+      </div>
+      <p class="err" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset class="f-step" data-step="2" hidden style="border:0;margin:0">
+      <h2>Vad behöver du hjälp med?</h2>
+      <p class="hint">Steg 2 av 4. Välj allt som passar.</p>
+      <div class="opts">
+        <label class="opt"><input type="checkbox" name="Behov" value="Excel och kalkylark"><span class="box"></span><span><b>Excel och kalkylark</b><small>Bygga nytt, fixa ett befintligt ark eller göra en mall</small></span></label>
+        <label class="opt"><input type="checkbox" name="Behov" value="Digitalisering"><span class="box"></span><span><b>Digitalisering</b><small>Få bort papper, dubbelarbete och manuella rutiner</small></span></label>
+        <label class="opt"><input type="checkbox" name="Behov" value="AI och automation"><span class="box"></span><span><b>AI och automation</b><small>Komma igång med AI eller automatisera något som upprepas</small></span></label>
+        <label class="opt"><input type="checkbox" name="Behov" value="Vet inte riktigt"><span class="box"></span><span><b>Vet inte riktigt</b><small>Du har ett problem men inte en lösning, och det är helt okej</small></span></label>
+      </div>
+      <p class="err" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset class="f-step" data-step="3" hidden style="border:0;margin:0">
+      <h2>Berätta lite mer</h2>
+      <p class="hint">Steg 3 av 4. Ju mer du skriver, desto träffsäkrare blir offerten.</p>
+      <label class="fld"><span>Vad vill du lösa?</span>
+        <textarea name="Beskrivning" required placeholder="T.ex. Vi för in alla anmälningar för hand i ett Excel-ark och skickar påminnelser manuellt. Vi vill att det sköter sig mer automatiskt."></textarea></label>
+      <div class="row2">
+        <label class="fld"><span>Tid det tar idag <em>(ungefär)</em></span>
+          <select name="Tid idag">
+            <option>Vet inte</option><option>Mindre än 1 timme i veckan</option><option>1–5 timmar i veckan</option><option>Mer än 5 timmar i veckan</option>
+          </select></label>
+        <label class="fld"><span>När ska det vara klart?</span>
+          <select name="Tidsplan">
+            <option>Ingen brådska</option><option>Så snart som möjligt</option><option>Inom en månad</option><option>Inom några månader</option>
+          </select></label>
+      </div>
+      <label class="fld"><span>Vad använder ni idag? <em>(valfritt)</em></span>
+        <select name="Verktyg">
+          <option>Vet inte / inget särskilt</option><option>Microsoft (Excel, Outlook, Teams)</option><option>Google (Kalkylark, Gmail, Drive)</option><option>Både och</option><option>Annat</option>
+        </select></label>
+      <p class="err" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset class="f-step" data-step="4" hidden style="border:0;margin:0">
+      <h2>Vart ska offerten skickas?</h2>
+      <p class="hint">Steg 4 av 4</p>
+      <div class="row2">
+        <label class="fld"><span>Namn</span><input name="name" autocomplete="name" required></label>
+        <label class="fld"><span>Mejl</span><input name="email" type="email" autocomplete="email" required></label>
+        <label class="fld"><span>Telefon <em>(valfritt)</em></span><input name="Telefon" type="tel" autocomplete="tel"></label>
+        <label class="fld"><span>Företag eller förening <em>(valfritt)</em></span><input name="Organisation" autocomplete="organization"></label>
+      </div>
+      <label class="fld"><span>Ort <em>(valfritt)</em></span><input name="Ort" autocomplete="address-level2"></label>
+      <p class="fine">Jag använder bara dina uppgifter för att svara på förfrågan.</p>
+      <p class="err" aria-live="polite"></p>
+    </fieldset>
+
+    <div class="f-step done" data-step="5" hidden>
+      <div class="check" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E62F5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+      <h2>Tack, förfrågan är skickad</h2>
+      <p class="hint">Jag går igenom dina svar och skickar en offert till <b id="f-mejl"></b> inom två arbetsdagar. Behöver jag veta mer hör jag av mig innan dess.</p>
+    </div>
+
+    <div class="f-foot">
+      <button class="btn ghost" type="button" id="f-back">Tillbaka</button>
+      <button class="btn" type="button" id="f-next">Nästa</button>
+    </div>
+  </form>
+</dialog>
+
 <script>
+/* Byt till din nyckel från web3forms.com (gratis). Svaren mejlas till adressen du anger där. */
+var WEB3FORMS_KEY = 'DIN_NYCKEL_HAR';
+
+(function(){
+  var dlg=document.getElementById('forfragan'), form=document.getElementById('f');
+  var steps=[].slice.call(form.querySelectorAll('.f-step')), bars=[].slice.call(form.querySelectorAll('.progress span'));
+  var back=document.getElementById('f-back'), next=document.getElementById('f-next'), cur=1, LAST=4;
+
+  function show(n){
+    cur=n;
+    steps.forEach(function(s){s.hidden=+s.dataset.step!==n});
+    bars.forEach(function(b,i){b.classList.toggle('on',i<n)});
+    back.style.visibility=(n>1&&n<=LAST)?'visible':'hidden';
+    next.textContent=n===LAST?'Skicka förfrågan':(n>LAST?'Stäng':'Nästa');
+    var first=form.querySelector('.f-step[data-step="'+n+'"] input:not(.hp),.f-step[data-step="'+n+'"] textarea');
+    if(first&&n<=LAST) setTimeout(function(){first.focus()},30);
+  }
+  function err(msg){var e=form.querySelector('.f-step[data-step="'+cur+'"] .err'); if(e) e.textContent=msg||'';}
+  function valid(){
+    err('');
+    if(cur===1&&!form.querySelector('[name=Kundtyp]:checked')){err('Välj ett alternativ för att gå vidare.');return false;}
+    if(cur===2&&!form.querySelector('[name=Behov]:checked')){err('Välj minst ett alternativ.');return false;}
+    if(cur===3&&form.Beskrivning.value.trim().length<10){err('Skriv några ord om vad du vill lösa.');form.Beskrivning.focus();return false;}
+    if(cur===4){
+      if(!form.elements['name'].value.trim()){err('Fyll i ditt namn.');form.elements['name'].focus();return false;}
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.elements['email'].value.trim())){err('Fyll i en mejladress som ser ut som namn@exempel.se.');form.elements['email'].focus();return false;}
+    }
+    return true;
+  }
+  function payload(){
+    var d={access_key:WEB3FORMS_KEY, subject:'Ny förfrågan: '+form.elements['name'].value.trim(), from_name:'edvinlindholm.se', botcheck:form.botcheck.checked};
+    d['Kundtyp']=(form.querySelector('[name=Kundtyp]:checked')||{}).value;
+    d['Behov']=[].map.call(form.querySelectorAll('[name=Behov]:checked'),function(x){return x.value}).join(', ');
+    ['Beskrivning','Tid idag','Tidsplan','Verktyg','name','email','Telefon','Organisation','Ort'].forEach(function(k){d[k]=form.elements[k].value.trim()});
+    return d;
+  }
+  function send(){
+    next.disabled=true; next.textContent='Skickar…';
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload())})
+      .then(function(r){return r.json()})
+      .then(function(j){
+        if(!j.success) throw new Error(j.message);
+        document.getElementById('f-mejl').textContent=form.elements['email'].value.trim();
+        show(5);
+      })
+      .catch(function(){
+        err('Förfrågan kunde inte skickas. Försök igen, eller mejla hej@edvinlindholm.se direkt.');
+        next.textContent='Skicka förfrågan';
+      })
+      .finally(function(){next.disabled=false});
+  }
+
+  next.addEventListener('click',function(){
+    if(cur>LAST){dlg.close();return;}
+    if(!valid()) return;
+    if(cur===LAST) send(); else show(cur+1);
+  });
+  back.addEventListener('click',function(){if(cur>1) show(cur-1)});
+  form.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();next.click();}});
+  [].forEach.call(document.querySelectorAll('[data-open]'),function(b){b.addEventListener('click',function(){
+    if(cur>LAST){form.reset();}
+    if(cur>LAST||cur<1) cur=1;
+    show(cur); dlg.showModal();
+  })});
+  dlg.querySelector('[data-close]').addEventListener('click',function(){dlg.close()});
+  dlg.addEventListener('click',function(e){if(e.target===dlg) dlg.close()});
+  show(1);
+})();
+
 document.getElementById('ar').textContent=new Date().getFullYear();
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
