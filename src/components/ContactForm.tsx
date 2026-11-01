@@ -5,6 +5,7 @@ import {
 } from '../../shared/contact';
 import { SITE } from '../site';
 import { useTurnstile } from './turnstile';
+import { FORM_BACKEND, oneLine, submitForm } from '../submit';
 
 const CUSTOMER_HINTS: Record<string, string> = {
   Företag: 'Du driver eller jobbar på ett företag',
@@ -44,7 +45,7 @@ export function ContactForm() {
   const startedAt = useRef(Date.now());
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
-  const ts = useTurnstile(step === 4 && status !== 'done', () =>
+  const ts = useTurnstile(FORM_BACKEND === 'worker' && step === 4 && status !== 'done', () =>
     setFormError('Spamskyddet kunde inte laddas. Ladda om sidan, eller mejla mig direkt.'),
   );
   const token = ts.token;
@@ -78,32 +79,43 @@ export function ContactForm() {
     setFormError('');
     if (step < 4) { next(); return; }
     if (!next()) return;
-    if (!token) { setFormError('Vänta tills spamkontrollen nedan är klar och försök igen.'); return; }
+    if (FORM_BACKEND === 'worker' && !token) { setFormError('Vänta tills spamkontrollen nedan är klar och försök igen.'); return; }
 
     setStatus('sending');
-    try {
-      const res = await fetch('/api/kontakt', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ ...d, startedAt: startedAt.current, turnstileToken: token }),
-      });
-      const body = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fields?: FieldErrors };
-      if (res.ok && body.ok) { setStatus('done'); return; }
-
-      setStatus('idle');
-      if (body.error === 'validation' && body.fields) {
-        setErrors(body.fields);
-        setFormError('Något i formuläret behöver rättas. Gå tillbaka och kontrollera de markerade fälten.');
-      } else if (body.error === 'turnstile_failed') {
-        setFormError('Spamkontrollen gick inte igenom. Gör om kontrollen och skicka igen.');
-      } else {
-        setFormError(`Förfrågan kunde inte skickas just nu. Försök igen om en stund, eller mejla ${SITE.email}.`);
-      }
-      ts.reset();
-    } catch {
-      setStatus('idle');
+    const r = await submitForm(
+      '/api/kontakt',
+      { ...d, startedAt: startedAt.current, turnstileToken: token },
+      {
+        subject: `Ny förfrågan: ${oneLine(d.name)}`,
+        replyTo: d.email.trim(),
+        rows: [
+          ['Kundtyp', d.customerType],
+          ['Behov', d.needs.join(', ')],
+          ['Beskrivning', d.description.trim()],
+          ...(isPrivate ? [] : [['Tid idag', d.timeSpent] as [string, string]]),
+          ['Tidsplan', d.timeline],
+          ['Verktyg', d.tools],
+          ['Namn', d.name.trim()],
+          ['Mejl', d.email.trim()],
+          ['Telefon', d.phone.trim() || '–'],
+          ...(isPrivate ? [] : [['Företag/förening', d.organization.trim() || '–'] as [string, string]]),
+          ['Ort', d.city.trim() || '–'],
+        ],
+      },
+    );
+    if (r.ok) { setStatus('done'); return; }
+    setStatus('idle');
+    if (r.error === 'validation') {
+      setErrors(r.fields);
+      setFormError('Något i formuläret behöver rättas. Gå tillbaka och kontrollera de markerade fälten.');
+    } else if (r.error === 'turnstile_failed') {
+      setFormError('Spamkontrollen gick inte igenom. Gör om kontrollen och skicka igen.');
+    } else if (r.error === 'network') {
       setFormError(`Ingen anslutning. Kontrollera internet och försök igen, eller mejla ${SITE.email}.`);
+    } else {
+      setFormError(`Förfrågan kunde inte skickas just nu. Försök igen om en stund, eller mejla ${SITE.email}.`);
     }
+    ts.reset();
   }
 
   if (status === 'done') {
@@ -244,7 +256,7 @@ export function ContactForm() {
             <span>Jag godkänner att mina uppgifter sparas för att kunna få svar på förfrågan. Läs mer i <a href="/integritet/">integritetspolicyn</a>.</span>
           </label>
           <Err id="err-consent" msg={errors.consent} />
-          <div className="turnstile" ref={ts.ref} />
+          {FORM_BACKEND === 'worker' && <div className="turnstile" ref={ts.ref} />}
         </div>
       )}
 

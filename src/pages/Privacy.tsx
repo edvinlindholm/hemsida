@@ -23,7 +23,7 @@ export function Privacy() {
         <p>Förfrågningar som inte leder till ett uppdrag raderas senast tolv månader efter senaste kontakt. Uppgifter som behövs för bokföring sparas så länge lagen kräver.</p>
 
         <h2>Vilka tjänster används?</h2>
-        <p>Sidan drivs av Cloudflare, som också skyddar formuläret mot spam med Cloudflare Turnstile. Formuläret skickas som mejl via Resend till min e-post hos Google Workspace. Fakturering sker via Coolcompany. Sidan använder inga cookies för spårning eller annonser.</p>
+        <p>Sidan drivs av Cloudflare. Formulären skickas som mejl via tjänsten Web3Forms till min e-post hos Google Workspace. Fakturering sker via Coolcompany. Sidan använder inga cookies för spårning eller annonser.</p>
 
         <h2>Dina rättigheter</h2>
         <p>Du kan när som helst be att få se, rätta eller radera dina uppgifter genom att mejla mig. Är du missnöjd med hur dina uppgifter hanteras kan du kontakta Integritetsskyddsmyndigheten (IMY).</p>

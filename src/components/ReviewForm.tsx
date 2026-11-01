@@ -2,6 +2,7 @@ import { useRef, useState, type FormEvent } from 'react';
 import { REVIEW_CUSTOMER_TYPES, REVIEW_LIMITS, validateReview, type ReviewErrors, type ReviewRequest } from '../../shared/review';
 import { SITE } from '../site';
 import { useTurnstile } from './turnstile';
+import { FORM_BACKEND, oneLine, submitForm } from '../submit';
 
 type Status = 'idle' | 'sending' | 'done';
 
@@ -19,7 +20,7 @@ export function ReviewForm() {
   const [formError, setFormError] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const startedAt = useRef(Date.now());
-  const ts = useTurnstile(status !== 'done', () =>
+  const ts = useTurnstile(FORM_BACKEND === 'worker' && status !== 'done', () =>
     setFormError(`Spamskyddet kunde inte laddas. Ladda om sidan, eller mejla ${SITE.email}.`),
   );
 
@@ -34,26 +35,33 @@ export function ReviewForm() {
     const e = validateReview(d);
     setErrors(e);
     if (Object.keys(e).length) return;
-    if (!ts.token) { setFormError('Vänta tills spamkontrollen nedan är klar och försök igen.'); return; }
+    if (FORM_BACKEND === 'worker' && !ts.token) { setFormError('Vänta tills spamkontrollen nedan är klar och försök igen.'); return; }
 
     setStatus('sending');
-    try {
-      const res = await fetch('/api/omdome', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ ...d, startedAt: startedAt.current, turnstileToken: ts.token }),
-      });
-      const body = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fields?: ReviewErrors };
-      if (res.ok && body.ok) { setStatus('done'); return; }
-      setStatus('idle');
-      if (body.error === 'validation' && body.fields) setErrors(body.fields);
-      else if (body.error === 'turnstile_failed') setFormError('Spamkontrollen gick inte igenom. Gör om kontrollen och skicka igen.');
-      else setFormError(`Omdömet kunde inte skickas just nu. Försök igen om en stund, eller mejla ${SITE.email}.`);
-      ts.reset();
-    } catch {
-      setStatus('idle');
-      setFormError(`Ingen anslutning. Kontrollera internet och försök igen, eller mejla ${SITE.email}.`);
-    }
+    const r = await submitForm(
+      '/api/omdome',
+      { ...d, startedAt: startedAt.current, turnstileToken: ts.token },
+      {
+        subject: `Nytt omdöme: ${oneLine(d.name)} (${d.rating}/5)`,
+        replyTo: d.email.trim(),
+        rows: [
+          ['Namn', d.name.trim()],
+          ['Visas som', d.title.trim() || '–'],
+          ['Kundtyp', d.customerType],
+          ['Betyg', `${d.rating} av 5`],
+          ['Omdöme', d.text.trim()],
+          ['Mejl (visas inte)', d.email.trim()],
+          ['Får publiceras', d.publishConsent ? 'Ja' : 'Nej'],
+        ],
+      },
+    );
+    if (r.ok) { setStatus('done'); return; }
+    setStatus('idle');
+    if (r.error === 'validation') setErrors(r.fields);
+    else if (r.error === 'turnstile_failed') setFormError('Spamkontrollen gick inte igenom. Gör om kontrollen och skicka igen.');
+    else if (r.error === 'network') setFormError(`Ingen anslutning. Kontrollera internet och försök igen, eller mejla ${SITE.email}.`);
+    else setFormError(`Omdömet kunde inte skickas just nu. Försök igen om en stund, eller mejla ${SITE.email}.`);
+    ts.reset();
   }
 
   if (status === 'done') {
@@ -133,7 +141,7 @@ export function ReviewForm() {
       </label>
       <Err id="err-consent" msg={errors.publishConsent} />
 
-      <div className="turnstile" ref={ts.ref} />
+      {FORM_BACKEND === 'worker' && <div className="turnstile" ref={ts.ref} />}
       {formError && <p className="form-error" role="alert">{formError}</p>}
 
       <div className="form-foot">

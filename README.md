@@ -4,7 +4,7 @@ Konsulthemsida för Edvin Lindholm: Excel och digitalisering.
 
 - **Frontend:** React 19 + TypeScript, byggd med Vite. Varje sida förrenderas till statisk HTML vid bygget (bra för SEO och snabb laddning) och hydreras sedan i webbläsaren.
 - **Hosting:** Cloudflare Workers med statiska filer (Workers Static Assets). Cloudflare rekommenderar Workers framför Pages för nya projekt, och samma Worker kan både servera sidorna och ta emot kontaktformuläret.
-- **Kontaktformulär:** `POST /api/kontakt` i Workern. Validerar indata, stoppar spam (Cloudflare Turnstile, dolt honeypot-fält, minsta ifyllnadstid, storleksgräns, ursprungskontroll) och skickar mejlet via Resend till `hej@edvinlindholm.se` med kundens adress som svarsadress. Inga mejl skickas från webbläsaren och inga nycklar finns i koden.
+- **Formulär:** styrs av `FORM_BACKEND` i `src/submit.ts`. Just nu `'web3forms'`: webbläsaren skickar direkt till Web3Forms som mejlar hej@edvinlindholm.se (gratis, inga nycklar i Cloudflare behövs). Byt till `'worker'` för att i stället använda `POST /api/kontakt` i Workern. Validerar indata, stoppar spam (Cloudflare Turnstile, dolt honeypot-fält, minsta ifyllnadstid, storleksgräns, ursprungskontroll) och skickar mejlet via Resend till `hej@edvinlindholm.se` med kundens adress som svarsadress. Inga mejl skickas från webbläsaren och inga nycklar finns i koden.
 
 ## Struktur
 
