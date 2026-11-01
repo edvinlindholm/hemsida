@@ -11,6 +11,8 @@ export interface PageMeta {
   description: string;
   /** Visas i sitemap. 404 tas inte med. */
   inSitemap?: boolean;
+  /** Ska inte indexeras av sökmotorer. */
+  noindex?: boolean;
 }
 
 export const NAV = [

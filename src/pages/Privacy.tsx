@@ -13,6 +13,9 @@ export function Privacy() {
         <h2>Vilka uppgifter sparas?</h2>
         <p>Det du själv fyller i: namn, mejladress och, om du vill, telefonnummer, organisation och ort, samt det du skriver om ditt behov.</p>
 
+        <h2>Omdömen</h2>
+        <p>Lämnar du ett omdöme via sidan för omdömen visas bara det du har godkänt: omdömet, namnet du skrivit och eventuell roll eller organisation. Mejladressen visas aldrig. Mejla mig om du vill att ett omdöme ändras eller tas bort.</p>
+
         <h2>Varför?</h2>
         <p>För att kunna svara på din förfrågan och skicka en offert. Om vi sedan gör affärer används uppgifterna för att genomföra uppdraget och fakturera. Uppgifterna används inte för marknadsföring och säljs aldrig vidare.</p>
 

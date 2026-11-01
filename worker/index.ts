@@ -1,4 +1,5 @@
 import { validateAll, type ContactRequest } from '../shared/contact';
+import { validateReview, type ReviewRequest } from '../shared/review';
 
 interface Env {
   ASSETS: Fetcher;
@@ -7,6 +8,25 @@ interface Env {
   ALLOWED_ORIGINS: string;
   RESEND_API_KEY?: string;
   TURNSTILE_SECRET_KEY?: string;
+}
+
+/** Fält som båda formulären har för spamskydd. */
+interface Protected {
+  website?: unknown;
+  startedAt?: unknown;
+  turnstileToken?: unknown;
+}
+
+interface Mail {
+  subject: string;
+  replyTo: string;
+  rows: [string, string][];
+}
+
+interface FormConfig<T> {
+  tag: string;
+  validate: (d: T) => Record<string, string | undefined>;
+  mail: (d: T) => Mail;
 }
 
 const MAX_BODY_BYTES = 20_000;
@@ -23,6 +43,8 @@ function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }
 
+const oneLine = (s: string) => s.trim().replace(/[\r\n]+/g, ' ');
+
 async function verifyTurnstile(token: string, secret: string, ip: string | null): Promise<boolean> {
   const form = new FormData();
   form.append('secret', secret);
@@ -34,20 +56,7 @@ async function verifyTurnstile(token: string, secret: string, ip: string | null)
   return data.success === true;
 }
 
-function buildEmail(d: ContactRequest) {
-  const rows: [string, string][] = [
-    ['Kundtyp', d.customerType],
-    ['Behov', d.needs.join(', ')],
-    ['Beskrivning', d.description.trim()],
-    ['Tid idag', d.timeSpent],
-    ['Tidsplan', d.timeline],
-    ['Verktyg', d.tools],
-    ['Namn', d.name.trim()],
-    ['Mejl', d.email.trim()],
-    ['Telefon', d.phone.trim() || '–'],
-    ['Företag/förening', d.organization.trim() || '–'],
-    ['Ort', d.city.trim() || '–'],
-  ];
+function renderMail(rows: [string, string][]) {
   const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
   const html =
     '<table style="font-family:Arial,sans-serif;font-size:14px;border-collapse:collapse">' +
@@ -59,10 +68,50 @@ function buildEmail(d: ContactRequest) {
       )
       .join('') +
     '</table>';
-  return { subject: `Ny förfrågan: ${d.name.trim().replace(/[\r\n]+/g, ' ')}`, text, html };
+  return { text, html };
 }
 
-async function handleContact(request: Request, env: Env): Promise<Response> {
+const CONTACT: FormConfig<ContactRequest> = {
+  tag: 'kontakt',
+  validate: (d) => validateAll(d),
+  mail: (d) => ({
+    subject: `Ny förfrågan: ${oneLine(d.name)}`,
+    replyTo: d.email.trim(),
+    rows: [
+      ['Kundtyp', d.customerType],
+      ['Behov', d.needs.join(', ')],
+      ['Beskrivning', d.description.trim()],
+      ['Tid idag', d.timeSpent],
+      ['Tidsplan', d.timeline],
+      ['Verktyg', d.tools],
+      ['Namn', d.name.trim()],
+      ['Mejl', d.email.trim()],
+      ['Telefon', d.phone.trim() || '–'],
+      ['Företag/förening', d.organization.trim() || '–'],
+      ['Ort', d.city.trim() || '–'],
+    ],
+  }),
+};
+
+const REVIEW: FormConfig<ReviewRequest> = {
+  tag: 'omdome',
+  validate: (d) => validateReview(d),
+  mail: (d) => ({
+    subject: `Nytt omdöme: ${oneLine(d.name)} (${d.rating}/5)`,
+    replyTo: d.email.trim(),
+    rows: [
+      ['Namn', d.name.trim()],
+      ['Visas som', d.title.trim() || '–'],
+      ['Kundtyp', d.customerType],
+      ['Betyg', `${d.rating} av 5`],
+      ['Omdöme', d.text.trim()],
+      ['Mejl (visas inte)', d.email.trim()],
+      ['Får publiceras', d.publishConsent ? 'Ja' : 'Nej'],
+    ],
+  }),
+};
+
+async function handleForm<T extends Protected>(request: Request, env: Env, cfg: FormConfig<T>): Promise<Response> {
   if (request.method !== 'POST') return json(405, { ok: false, error: 'method_not_allowed' });
 
   // Tillåt samma ursprung (produktion och preview-adresser) samt uttryckligen listade ursprung (lokal utveckling).
@@ -77,19 +126,20 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   const raw = await request.text();
   if (raw.length > MAX_BODY_BYTES) return json(413, { ok: false, error: 'too_large' });
 
-  let d: ContactRequest;
+  let d: T;
   try {
     d = JSON.parse(raw);
   } catch {
     return json(400, { ok: false, error: 'invalid_json' });
   }
+  if (!d || typeof d !== 'object') return json(400, { ok: false, error: 'invalid_json' });
 
   // Honeypot och för snabbt ifyllt: låtsas att allt gick bra så att robotar inte lär sig något.
   if ((typeof d.website === 'string' && d.website !== '') || typeof d.startedAt !== 'number' || Date.now() - d.startedAt < MIN_FILL_MS) {
     return json(200, { ok: true });
   }
 
-  const errors = validateAll(d);
+  const errors = cfg.validate(d);
   if (Object.keys(errors).length > 0) return json(422, { ok: false, error: 'validation', fields: errors });
 
   if (!env.TURNSTILE_SECRET_KEY) return json(500, { ok: false, error: 'not_configured' });
@@ -97,16 +147,17 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   try {
     human = await verifyTurnstile(String(d.turnstileToken ?? ''), env.TURNSTILE_SECRET_KEY, request.headers.get('cf-connecting-ip'));
   } catch (err) {
-    console.error('[kontakt] Turnstile kunde inte nås', err);
+    console.error(`[${cfg.tag}] Turnstile kunde inte nås`, err);
     return json(502, { ok: false, error: 'verify_unavailable' });
   }
   if (!human) return json(403, { ok: false, error: 'turnstile_failed' });
 
-  const mail = buildEmail(d);
+  const mail = cfg.mail(d);
+  const { text, html } = renderMail(mail.rows);
 
   if (!env.RESEND_API_KEY) {
     // Lokal utveckling utan nyckel: logga i stället för att skicka.
-    console.log('[kontakt] RESEND_API_KEY saknas – mejlet skickades inte:\n' + mail.text);
+    console.log(`[${cfg.tag}] RESEND_API_KEY saknas – mejlet skickades inte:\n${mail.subject}\n${text}`);
     return json(200, { ok: true, dev: true });
   }
 
@@ -118,18 +169,18 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
       body: JSON.stringify({
         from: env.CONTACT_FROM,
         to: [env.CONTACT_TO],
-        reply_to: d.email.trim(),
+        reply_to: mail.replyTo,
         subject: mail.subject,
-        text: mail.text,
-        html: mail.html,
+        text,
+        html,
       }),
     });
   } catch (err) {
-    console.error('[kontakt] Resend kunde inte nås', err);
+    console.error(`[${cfg.tag}] Resend kunde inte nås`, err);
     return json(502, { ok: false, error: 'send_failed' });
   }
   if (!res.ok) {
-    console.error('[kontakt] Resend svarade', res.status, await res.text());
+    console.error(`[${cfg.tag}] Resend svarade`, res.status, await res.text());
     return json(502, { ok: false, error: 'send_failed' });
   }
   return json(200, { ok: true });
@@ -145,7 +196,8 @@ export default {
     }
     // Tjänsten är borttagen; skicka gamla länkar till startsidan.
     if (url.pathname.startsWith('/ai-och-automation')) return Response.redirect(`${url.origin}/`, 301);
-    if (url.pathname === '/api/kontakt') return handleContact(request, env);
+    if (url.pathname === '/api/kontakt') return handleForm(request, env, CONTACT);
+    if (url.pathname === '/api/omdome') return handleForm(request, env, REVIEW);
     if (url.pathname.startsWith('/api/')) return json(404, { ok: false, error: 'not_found' });
     return env.ASSETS.fetch(request);
   },

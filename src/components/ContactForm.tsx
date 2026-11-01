@@ -4,19 +4,7 @@ import {
   validateStep, type ContactRequest, type FieldErrors,
 } from '../../shared/contact';
 import { SITE } from '../site';
-
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (el: HTMLElement, opts: Record<string, unknown>) => string;
-      reset: (id?: string) => void;
-      remove: (id?: string) => void;
-    };
-  }
-}
-
-const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
-const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+import { useTurnstile } from './turnstile';
 
 const CUSTOMER_HINTS: Record<string, string> = {
   Företag: 'Du driver eller jobbar på ett företag',
@@ -43,21 +31,6 @@ const EMPTY: Omit<ContactRequest, 'startedAt' | 'turnstileToken'> = {
   name: '', email: '', phone: '', organization: '', city: '', consent: false, website: '',
 };
 
-function loadTurnstile(): Promise<void> {
-  if (window.turnstile) return Promise.resolve();
-  const existing = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SRC}"]`);
-  return new Promise((resolve, reject) => {
-    const s = existing ?? document.createElement('script');
-    s.addEventListener('load', () => resolve());
-    s.addEventListener('error', () => reject(new Error('turnstile')));
-    if (!existing) {
-      s.src = TURNSTILE_SRC;
-      s.async = true;
-      document.head.appendChild(s);
-    }
-  });
-}
-
 function Err({ id, msg }: { id: string; msg?: string }) {
   return <p id={id} className="field-error" role={msg ? 'alert' : undefined}>{msg ?? ''}</p>;
 }
@@ -68,41 +41,19 @@ export function ContactForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState('');
   const [status, setStatus] = useState<Status>('idle');
-  const [token, setToken] = useState('');
   const startedAt = useRef(Date.now());
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const tsBox = useRef<HTMLDivElement>(null);
-  const tsId = useRef<string | undefined>(undefined);
   const firstRender = useRef(true);
+  const ts = useTurnstile(step === 4 && status !== 'done', () =>
+    setFormError('Spamskyddet kunde inte laddas. Ladda om sidan, eller mejla mig direkt.'),
+  );
+  const token = ts.token;
 
   useEffect(() => {
     if (firstRender.current) { firstRender.current = false; return; }
     headingRef.current?.focus();
   }, [step, status]);
 
-  // Ladda Turnstile i sista steget.
-  useEffect(() => {
-    if (step !== 4 || status === 'done') return;
-    let cancelled = false;
-    loadTurnstile()
-      .then(() => {
-        if (cancelled || !tsBox.current || !window.turnstile || tsId.current) return;
-        tsId.current = window.turnstile.render(tsBox.current, {
-          sitekey: SITE_KEY,
-          language: 'sv',
-          callback: (t: string) => setToken(t),
-          'expired-callback': () => setToken(''),
-          'error-callback': () => setToken(''),
-        });
-      })
-      .catch(() => setFormError('Spamskyddet kunde inte laddas. Ladda om sidan, eller mejla mig direkt.'));
-    return () => {
-      cancelled = true;
-      if (tsId.current && window.turnstile) window.turnstile.remove(tsId.current);
-      tsId.current = undefined;
-      setToken('');
-    };
-  }, [step, status]);
 
   const set = <K extends keyof typeof d>(k: K, v: (typeof d)[K]) => {
     setD((prev) => ({ ...prev, [k]: v }));
@@ -148,8 +99,7 @@ export function ContactForm() {
       } else {
         setFormError(`Förfrågan kunde inte skickas just nu. Försök igen om en stund, eller mejla ${SITE.email}.`);
       }
-      if (tsId.current) window.turnstile?.reset(tsId.current);
-      setToken('');
+      ts.reset();
     } catch {
       setStatus('idle');
       setFormError(`Ingen anslutning. Kontrollera internet och försök igen, eller mejla ${SITE.email}.`);
@@ -294,7 +244,7 @@ export function ContactForm() {
             <span>Jag godkänner att mina uppgifter sparas för att kunna få svar på förfrågan. Läs mer i <a href="/integritet/">integritetspolicyn</a>.</span>
           </label>
           <Err id="err-consent" msg={errors.consent} />
-          <div className="turnstile" ref={tsBox} />
+          <div className="turnstile" ref={ts.ref} />
         </div>
       )}
 

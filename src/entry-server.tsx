@@ -22,7 +22,7 @@ function head(route: Route): string {
     `<meta property="og:description" content="${esc(route.description)}" />`,
     `<meta property="og:url" content="${url}" />`,
   ];
-  if (route === NOT_FOUND) tags.push('<meta name="robots" content="noindex" />');
+  if (route === NOT_FOUND || route.noindex) tags.push('<meta name="robots" content="noindex" />');
   else tags.push(`<link rel="canonical" href="${url}" />`);
   if (route.path === '/') {
     const ld = {

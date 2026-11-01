@@ -6,6 +6,7 @@ import { About } from './pages/About';
 import { Contact } from './pages/Contact';
 import { Privacy } from './pages/Privacy';
 import { NotFound } from './pages/NotFound';
+import { Review } from './pages/Review';
 
 export interface Route extends PageMeta {
   render: () => ReactNode;
@@ -41,6 +42,14 @@ export const ROUTES: Route[] = [
     title: 'Begär en offert | Edvin Lindholm',
     description: 'Svara på några korta frågor om vad du behöver, så får du en offert med fast pris inom två arbetsdagar.',
     render: () => <Contact />,
+  },
+  {
+    path: '/omdome/',
+    title: 'Lämna ett omdöme | Edvin Lindholm',
+    description: 'Lämna ett omdöme om ett uppdrag.',
+    inSitemap: false,
+    noindex: true,
+    render: () => <Review />,
   },
   {
     path: '/integritet/',

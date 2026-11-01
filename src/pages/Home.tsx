@@ -1,5 +1,6 @@
 import { CtaBand } from '../components/Layout';
 import { SheetDemo } from '../components/SheetDemo';
+import { Testimonials } from '../components/Testimonials';
 
 const SERVICES = [
   {
@@ -98,6 +99,8 @@ export function Home() {
           </ol>
         </div>
       </section>
+
+      <Testimonials />
 
       <section className="section" aria-labelledby="om-rubrik">
         <div className="wrap split">

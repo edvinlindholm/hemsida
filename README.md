@@ -41,6 +41,7 @@ Lokalt används Turnstiles testnycklar och mejlet loggas i terminalen i stället
 - Texter på tjänstesidorna: `src/pages/Service.tsx`
 - Startsidan: `src/pages/Home.tsx`
 - Sidtitlar och beskrivningar för Google: `src/routes.tsx`
+- Kundomdömen: kunder fyller i formuläret på `/omdome/` (syns inte i menyn eller på Google). Omdömet kommer som mejl. Godkända omdömen läggs in i `src/data/testimonials.ts`, och då dyker avsnittet upp på startsidan automatiskt.
 - Ny sida: skapa en komponent i `src/pages/`, lägg till den i `ROUTES` i `src/routes.tsx` och i menyn i `src/site.ts`.
 
 Gör ändringen på en egen gren, pusha och öppna en pull request. Cloudflare bygger en förhandsversion med egen adress. När allt ser bra ut slår du ihop till `main`, och då publiceras ändringen på edvinlindholm.se.
