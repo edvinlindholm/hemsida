@@ -11,8 +11,7 @@ export function Contact() {
           <h2 className="small-h">Det här händer sedan</h2>
           <ol className="mini-steps">
             <li>Jag läser igenom dina svar.</li>
-            <li>Inom två arbetsdagar får du en offert, eller några frågor om jag behöver veta mer.</li>
-            <li>Ligger det utanför det jag kan säger jag det ärligt, och då skickas ingen offert.</li>
+            <li>Inom två arbetsdagar får du en offert. Kan jag inte hjälpa till meddelar jag dig, och ingen offert skickas.</li>
             <li>Säger du ja börjar jag bygga.</li>
           </ol>
           <p className="muted">Hellre mejla direkt? Skriv till <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>

@@ -157,8 +157,7 @@ export function ContactForm() {
         </div>
         <h2 ref={headingRef} tabIndex={-1}>Tack, förfrågan är skickad</h2>
         <p>
-          Jag går igenom dina svar och hör av mig till <strong>{d.email.trim()}</strong> inom två arbetsdagar. Kan jag
-          hjälpa dig får du en offert med fast pris. Ligger det utanför det jag kan säger jag det, och då skickas ingen offert.
+          Jag går igenom dina svar och hör av mig till <strong>{d.email.trim()}</strong> inom två arbetsdagar.
         </p>
         <a className="btn" href="/">Till startsidan</a>
       </div>

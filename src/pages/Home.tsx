@@ -25,7 +25,7 @@ const PAINS = [
 
 const STEPS = [
   { h: 'Berätta vad du behöver', p: 'Svara på några frågor i formuläret. Det tar ett par minuter.' },
-  { h: 'Offert eller ärligt besked', p: 'Inom två arbetsdagar får du ett förslag med fast pris. Kan jag inte lösa det säger jag det direkt, och då skickas ingen offert.' },
+  { h: 'Offert till din mejl', p: 'Inom två arbetsdagar får du ett förslag med fast pris. Kan jag inte hjälpa till meddelar jag dig, och ingen offert skickas.' },
   { h: 'Jag bygger', p: 'Du ser utkast under arbetet och säger till om ändringar.' },
   { h: 'Överlämning', p: 'Jag visar hur allt fungerar så att du klarar dig själv.' },
 ];

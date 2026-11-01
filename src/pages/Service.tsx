@@ -62,10 +62,6 @@ export function Service({ c }: { c: ServiceContent }) {
 
 const COMMON_FAQ = [
   {
-    q: 'Vad händer om du inte kan lösa det jag behöver?',
-    a: 'Då säger jag det rakt ut i stället för att skicka en offert. Jag tar bara uppdrag som jag vet att jag kan leverera, och det kostar dig ingenting att fråga.',
-  },
-  {
     q: 'Vad kostar det?',
     a: 'Varje uppdrag får ett fast pris i offerten, baserat på vad du behöver. Du vet alltså exakt vad det kostar innan jag börjar, och det kostar inget att be om en offert.',
   },
