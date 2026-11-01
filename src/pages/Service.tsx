@@ -70,8 +70,8 @@ const COMMON_FAQ = [
     a: 'Jag fakturerar via Coolcompany. Du får en vanlig faktura med moms när arbetet är levererat.',
   },
   {
-    q: 'Jobbar du på distans?',
-    a: 'Ja. De flesta uppdrag går att göra helt på distans. Bor du i nordvästra Skåne kan vi också ses.',
+    q: 'Behöver vi ses?',
+    a: 'Sällan. Arbetet sker på distans, och vi håller kontakten via mejl, telefon eller videosamtal. Det gör att jag kan hjälpa dig var du än bor i Sverige.',
   },
 ];
 

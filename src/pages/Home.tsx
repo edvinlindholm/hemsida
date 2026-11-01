@@ -66,7 +66,7 @@ export function Home() {
             <ul className="facts-inline">
               <li>Fast pris i offerten</li>
               <li>Svar inom två arbetsdagar</li>
-              <li>Skåne och på distans</li>
+              <li>Arbetet sker på distans</li>
             </ul>
           </div>
           <SheetDemo />

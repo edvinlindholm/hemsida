@@ -27,7 +27,7 @@ export const ROUTES: Route[] = [
   {
     path: '/digitalisering/',
     title: 'Digitalisering av manuella rutiner | Edvin Lindholm',
-    description: 'Från papper och mejltrådar till digitala formulär, delade listor och smarta flöden. För småföretag och föreningar i Skåne och på distans.',
+    description: 'Från papper och mejltrådar till digitala formulär, delade listor och smarta flöden. För småföretag och föreningar, på distans i hela Sverige.',
     render: () => <Service c={DIGITAL} />,
   },
   {

@@ -3,6 +3,12 @@
 
 export const CUSTOMER_TYPES = ['Företag', 'Förening', 'Privatperson'] as const;
 export const NEEDS = ['Excel och kalkylark', 'Digitalisering', 'Vet inte riktigt'] as const;
+export const PRIVATE_NEEDS = ['Habit tracker', 'Budget och ekonomi', 'Träningslogg', 'Planering och att göra-listor', 'Något annat'] as const;
+
+/** Vilka behov som går att välja beror på vem kunden är. */
+export function needsFor(customerType: string | undefined): readonly string[] {
+  return customerType === 'Privatperson' ? PRIVATE_NEEDS : NEEDS;
+}
 export const TIME_SPENT = ['Vet inte', 'Mindre än 1 timme i veckan', '1–5 timmar i veckan', 'Mer än 5 timmar i veckan'] as const;
 export const TIMELINES = ['Ingen brådska', 'Så snart som möjligt', 'Inom en månad', 'Inom några månader'] as const;
 export const TOOLS = ['Vet inte / inget särskilt', 'Microsoft (Excel, Outlook, Teams)', 'Google (Kalkylark, Gmail, Drive)', 'Både och', 'Annat'] as const;
@@ -46,7 +52,7 @@ function text(v: unknown, max: number): string | null {
 export function validateStep(step: 1 | 2 | 3 | 4, d: Partial<ContactRequest>): FieldErrors {
   const e: FieldErrors = {};
   if (step === 1 && !oneOf(CUSTOMER_TYPES, d.customerType)) e.customerType = 'Välj ett alternativ för att gå vidare.';
-  if (step === 2 && (!Array.isArray(d.needs) || d.needs.length === 0 || !d.needs.every((n) => oneOf(NEEDS, n))))
+  if (step === 2 && (!Array.isArray(d.needs) || d.needs.length === 0 || !d.needs.every((n) => oneOf(needsFor(d.customerType), n))))
     e.needs = 'Välj minst ett alternativ.';
   if (step === 3) {
     const desc = text(d.description, LIMITS.description);

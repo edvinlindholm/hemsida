@@ -32,7 +32,7 @@ export function About() {
             <li>Jag visar hur det fungerar, så att du klarar dig själv efteråt.</li>
           </ul>
           <dl className="facts">
-            <div><dt>Område</dt><dd>Skåne och på distans</dd></div>
+            <div><dt>Område</dt><dd>Hela Sverige, på distans</dd></div>
             <div><dt>Kunder</dt><dd>Företag, föreningar och privatpersoner</dd></div>
             <div><dt>Fakturering</dt><dd>Via Coolcompany, med moms</dd></div>
           </dl>

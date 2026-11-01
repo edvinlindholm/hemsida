@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import {
-  CUSTOMER_TYPES, LIMITS, NEEDS, TIMELINES, TIME_SPENT, TOOLS,
+  CUSTOMER_TYPES, LIMITS, needsFor, TIMELINES, TIME_SPENT, TOOLS,
   validateStep, type ContactRequest, type FieldErrors,
 } from '../../shared/contact';
 import { SITE } from '../site';
@@ -27,6 +27,11 @@ const NEED_HINTS: Record<string, string> = {
   'Excel och kalkylark': 'Bygga nytt, fixa ett befintligt ark eller göra en mall',
   Digitalisering: 'Få bort papper, dubbelarbete och manuella rutiner',
   'Vet inte riktigt': 'Du har ett problem men inte en lösning, och det är helt okej',
+  'Habit tracker': 'Följ dina vanor dag för dag och se hur det går över tid',
+  'Budget och ekonomi': 'Koll på inkomster, utgifter, sparande eller lån',
+  Träningslogg: 'Pass, vikter, löpning eller annat du vill följa upp',
+  'Planering och att göra-listor': 'Veckoplanering, projekt eller hushållets listor',
+  'Något annat': 'Beskriv vad du vill ha i nästa steg',
 };
 
 type Step = 1 | 2 | 3 | 4;
@@ -103,6 +108,8 @@ export function ContactForm() {
     setD((prev) => ({ ...prev, [k]: v }));
     setErrors((prev) => ({ ...prev, [k]: undefined }));
   };
+
+  const isPrivate = d.customerType === 'Privatperson';
 
   const toggleNeed = (n: string) =>
     set('needs', d.needs.includes(n) ? d.needs.filter((x) => x !== n) : [...d.needs, n]);
@@ -189,7 +196,7 @@ export function ContactForm() {
           <legend className="sr-only">Vem är du?</legend>
           {CUSTOMER_TYPES.map((t) => (
             <label key={t} className="opt">
-              <input type="radio" name="customerType" value={t} checked={d.customerType === t} onChange={() => set('customerType', t)} />
+              <input type="radio" name="customerType" value={t} checked={d.customerType === t} onChange={() => { set('customerType', t); set('needs', d.needs.filter((n) => needsFor(t).includes(n))); }} />
               <span className="box" />
               <span><b>{t}</b><small>{CUSTOMER_HINTS[t]}</small></span>
             </label>
@@ -201,7 +208,7 @@ export function ContactForm() {
       {step === 2 && (
         <fieldset className="opts" aria-describedby="err-needs">
           <legend className="hint">Välj allt som passar.</legend>
-          {NEEDS.map((n) => (
+          {needsFor(d.customerType).map((n) => (
             <label key={n} className="opt">
               <input type="checkbox" checked={d.needs.includes(n)} onChange={() => toggleNeed(n)} />
               <span className="box" />
@@ -222,18 +229,22 @@ export function ContactForm() {
               maxLength={LIMITS.description}
               aria-invalid={!!errors.description}
               aria-describedby="err-desc"
-              placeholder="T.ex. Vi för in alla anmälningar för hand i ett Excel-ark och skickar påminnelser manuellt. Vi vill att det sköter sig mer automatiskt."
+              placeholder={isPrivate
+                ? 'T.ex. Jag vill ha en enkel budget där jag ser vad pengarna går till varje månad och hur mycket jag sparar.'
+                : 'T.ex. Vi för in alla anmälningar för hand i ett Excel-ark och skickar påminnelser manuellt. Vi vill att det sköter sig mer automatiskt.'}
               onChange={(e) => set('description', e.target.value)}
             />
           </label>
           <Err id="err-desc" msg={errors.description} />
           <div className="row2">
-            <label className="fld">
-              <span>Tid det tar idag <em>(ungefär)</em></span>
-              <select value={d.timeSpent} onChange={(e) => set('timeSpent', e.target.value)}>
-                {TIME_SPENT.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </label>
+            {!isPrivate && (
+              <label className="fld">
+                <span>Tid det tar idag <em>(ungefär)</em></span>
+                <select value={d.timeSpent} onChange={(e) => set('timeSpent', e.target.value)}>
+                  {TIME_SPENT.map((o) => <option key={o}>{o}</option>)}
+                </select>
+              </label>
+            )}
             <label className="fld">
               <span>När ska det vara klart?</span>
               <select value={d.timeline} onChange={(e) => set('timeline', e.target.value)}>
@@ -242,7 +253,7 @@ export function ContactForm() {
             </label>
           </div>
           <label className="fld">
-            <span>Vad använder ni idag?</span>
+            <span>{isPrivate ? 'Vad använder du idag?' : 'Vad använder ni idag?'}</span>
             <select value={d.tools} onChange={(e) => set('tools', e.target.value)}>
               {TOOLS.map((o) => <option key={o}>{o}</option>)}
             </select>
@@ -267,10 +278,12 @@ export function ContactForm() {
               <span>Telefon <em>(valfritt)</em></span>
               <input type="tel" value={d.phone} maxLength={LIMITS.phone} autoComplete="tel" onChange={(e) => set('phone', e.target.value)} />
             </label>
-            <label className="fld">
-              <span>Företag eller förening <em>(valfritt)</em></span>
-              <input value={d.organization} maxLength={LIMITS.organization} autoComplete="organization" onChange={(e) => set('organization', e.target.value)} />
-            </label>
+            {!isPrivate && (
+              <label className="fld">
+                <span>Företag eller förening <em>(valfritt)</em></span>
+                <input value={d.organization} maxLength={LIMITS.organization} autoComplete="organization" onChange={(e) => set('organization', e.target.value)} />
+              </label>
+            )}
           </div>
           <label className="fld">
             <span>Ort <em>(valfritt)</em></span>
