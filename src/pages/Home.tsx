@@ -1,0 +1,161 @@
+import { CtaBand } from '../components/Layout';
+import { SheetDemo } from '../components/SheetDemo';
+
+const SERVICES = [
+  {
+    href: '/excel/',
+    title: 'Excel och kalkylark',
+    more: 'Läs mer om Excel-tjänster',
+    text: 'Nya verktyg eller uppstädning av det du redan har. Budget, uppföljning, rapporter och mallar som räknar rätt.',
+  },
+  {
+    href: '/digitalisering/',
+    title: 'Digitalisering',
+    more: 'Läs mer om digitalisering',
+    text: 'Papper, mejltrådar och dubbelarbete blir digitala rutiner. Formulär, delade listor och smarta flöden.',
+  },
+  {
+    href: '/ai-och-automation/',
+    title: 'AI och automation',
+    more: 'Läs mer om AI och automation',
+    text: 'Kom igång med AI på riktigt. Jag sätter upp verktygen, kopplar dem till det du redan använder och visar hur.',
+  },
+];
+
+const PAINS = [
+  'Samma siffror förs in på flera ställen.',
+  'Kalkylarket har vuxit sig så stort att ingen vågar ändra i det.',
+  'Anmälningar, listor och påminnelser sköts för hand.',
+  'Varje månad tar rapporten en halv dag att sätta ihop.',
+  'Du vill använda AI men vet inte var du ska börja.',
+];
+
+const STEPS = [
+  { h: 'Berätta vad du behöver', p: 'Svara på några frågor i formuläret. Det tar ett par minuter.' },
+  { h: 'Offert till din mejl', p: 'Inom två arbetsdagar får du ett förslag och ett fast pris.' },
+  { h: 'Jag bygger', p: 'Du ser utkast under arbetet och säger till om ändringar.' },
+  { h: 'Överlämning', p: 'Jag visar hur allt fungerar så att du klarar dig själv.' },
+];
+
+const CASES = [
+  {
+    title: 'Löpningstracker för innebandylag',
+    text: 'Försäsongsträning för 26 spelare med statistik per spelare, tempo och en topplista som uppdateras automatiskt.',
+    tag: 'Förening',
+  },
+  {
+    title: 'Säljuppföljning vecka för vecka',
+    text: 'Provisionsbaserad försäljning jämförs mot veckomålet, så att man direkt ser om man ligger efter.',
+    tag: 'Företag',
+  },
+  {
+    title: 'Planeringsverktyg för klädmärke',
+    text: 'En arbetsbok som samlar innehållskalender, försäljning, uppgifter och kollektioner på ett ställe.',
+    tag: 'Företag',
+  },
+];
+
+export function Home() {
+  return (
+    <>
+      <section className="hero">
+        <div className="wrap hero-grid">
+          <div>
+            <h1>Excel, digitalisering och AI som sparar dig tid.</h1>
+            <p className="lede">
+              Jag hjälper småföretag, föreningar och privatpersoner att bygga smarta kalkylark, få bort manuellt
+              dubbelarbete och komma igång med AI. Du får alltid ett fast pris innan jag börjar.
+            </p>
+            <div className="btn-row">
+              <a className="btn btn-large" href="/kontakt/">Jag är intresserad</a>
+              <a className="btn btn-large btn-ghost" href="#tjanster">Se tjänsterna</a>
+            </div>
+            <ul className="facts-inline">
+              <li>Fast pris i offerten</li>
+              <li>Svar inom två arbetsdagar</li>
+              <li>Skåne och på distans</li>
+            </ul>
+          </div>
+          <SheetDemo />
+        </div>
+      </section>
+
+      <section id="tjanster" className="section" aria-labelledby="tj-rubrik">
+        <div className="wrap">
+          <h2 id="tj-rubrik">Det här kan jag hjälpa dig med</h2>
+          <div className="cards">
+            {SERVICES.map((s) => (
+              <a key={s.href} className="card card-link" href={s.href}>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <span className="card-more">{s.more}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-alt" aria-labelledby="kanner-rubrik">
+        <div className="wrap split">
+          <div>
+            <h2 id="kanner-rubrik">Känner du igen dig?</h2>
+            <p className="muted">
+              Det mesta som tar tid i onödan går att lösa med verktyg du redan har. Ofta räcker ett bättre kalkylark
+              eller ett formulär för att spara flera timmar i veckan.
+            </p>
+          </div>
+          <ul className="checklist">
+            {PAINS.map((p) => <li key={p}>{p}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="steg-rubrik">
+        <div className="wrap">
+          <h2 id="steg-rubrik">Så går det till</h2>
+          <ol className="steps">
+            {STEPS.map((s) => (
+              <li key={s.h}>
+                <h3>{s.h}</h3>
+                <p>{s.p}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section section-alt" aria-labelledby="ex-rubrik">
+        <div className="wrap">
+          <h2 id="ex-rubrik">Exempel på sådant jag har byggt</h2>
+          <div className="cards">
+            {CASES.map((c) => (
+              <article key={c.title} className="card">
+                <span className="tag">{c.tag}</span>
+                <h3>{c.title}</h3>
+                <p>{c.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="om-rubrik">
+        <div className="wrap split">
+          <h2 id="om-rubrik">Hej, jag heter Edvin</h2>
+          <div>
+            <p>
+              Jag bor i Örkelljunga och bygger verktyg som gör vardagen enklare för föreningar, företag och mig själv.
+              Det bästa jag vet är när något som tog en timme i veckan plötsligt tar två minuter.
+            </p>
+            <a className="text-link" href="/om-mig/">Mer om mig</a>
+          </div>
+        </div>
+      </section>
+
+      <CtaBand
+        title="Vad vill du slippa göra för hand?"
+        text="Berätta kort vad du behöver, så får du en offert med fast pris till din mejl."
+      />
+    </>
+  );
+}

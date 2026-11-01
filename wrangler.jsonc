@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hemsida",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true },
+  "vars": {
+    // Mottagare och avsändare för formulärmejl. Avsändardomänen måste vara verifierad i Resend.
+    "CONTACT_TO": "hej@edvinlindholm.se",
+    "CONTACT_FROM": "Hemsidan <formular@mail.edvinlindholm.se>",
+    "ALLOWED_ORIGINS": "https://edvinlindholm.se,https://www.edvinlindholm.se"
+  }
+  // Hemligheter sätts i Cloudflare, aldrig här:
+  //   RESEND_API_KEY, TURNSTILE_SECRET_KEY
+}
