@@ -10,4 +10,11 @@ export interface Testimonial {
   text: string;
 }
 
-export const TESTIMONIALS: Testimonial[] = [];
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    name: 'Liam',
+    title: 'Företag',
+    rating: 5,
+    text: 'Edvin hjälpte mig att bygga ett Excel-ark som räknar ut mina provisionsmål utifrån försäljningen. Jag är väldigt nöjd!',
+  },
+];

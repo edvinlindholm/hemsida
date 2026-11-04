@@ -7,7 +7,7 @@ export function Testimonials() {
     <section className="section section-alt" aria-labelledby="omdomen-rubrik">
       <div className="wrap">
         <h2 id="omdomen-rubrik">Det här säger mina kunder</h2>
-        <div className="cards">
+        <div className={TESTIMONIALS.length === 1 ? 'cards cards-1' : TESTIMONIALS.length === 2 ? 'cards cards-2' : 'cards'}>
           {TESTIMONIALS.map((t) => (
             <figure key={t.name + t.text.slice(0, 20)} className="card quote">
               <div className="quote-stars" aria-label={`${t.rating} av 5`}>
